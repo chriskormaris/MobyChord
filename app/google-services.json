@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "397012046313",
+    "project_id": "mobychord"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397012046313:android:02927afd2792a201",
+        "android_client_info": {
+          "package_name": "msc_aueb_gr_pol_liosis.mobychord"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397012046313-cco4jqldde56vhluic94m2b20qvlqkl6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "msc_aueb_gr_pol_liosis.mobychord",
+            "certificate_hash": "FE302CF0A1888390BF11BA4CDAE2669C23B4703C"
+          }
+        },
+        {
+          "client_id": "397012046313-6ivh7nsr1gpfl6ci9b6b769h3dmg9ljg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZ1dMSz1sIEJpt9RN_U25RGTjE2F8Mkec"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
