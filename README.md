@@ -1,10 +1,8 @@
 # MobyChord
-# Κατανεμημένα Συστήματα Project
-# Chord p2p σύστημα με android κινητές συσκευές
 
-## Πολύβιος Λιόσης
-## Κορμαρής Χρήστος
-## Μποτονάκης Δημήτριος
+## Κατανεμημένα Συστήματα Project - Chord p2p σύστημα με android κινητές συσκευές
+
+### Πολύβιος Λιόσης, Κορμαρής Χρήστος, Μποτονάκης Δημήτριος
 
 Ο κόμβος που κάνει request ζητάει από έναν προκαθορισμένο κόμβο του Chord που επιλέγει, το μονοπάτι (route).
 Το id του route είναι το srcPostalCode και το dstPostalCode μαζί hashαρισμένα.
@@ -24,40 +22,35 @@
 Παράδειγμα ονομασίας json αρχείου με πληροφορίες για ένα Route: "3_GREECE_15771_GREECE_11362.json"
 Στη συνέχεια, τα περιεχόμενα του json αρχείου στέλνονται πίσω στον client για να ζωγραφιστεί τελικώς το μονοπάτι στο χάρτη.
 
-ΣΧΟΛΙΟ: Η ΕΡΓΑΣΙΑ ΔΟΥΛΕΨΕ ΣΕ ΠΡΑΓΜΑΤΙΚΑ ΚΙΝΗΤΑ.
-
+**ΣΧΟΛΙΟ:** Η ΕΡΓΑΣΙΑ ΔΟΥΛΕΨΕ ΣΕ ΠΡΑΓΜΑΤΙΚΑ ΚΙΝΗΤΑ.
 
 
 Συνθήκες για το αν ένας κόμβος είναι closest preceding finger ενός άλλου.
-
 
 Για κάθε finger[i] του finger table (ξεκινώντας από το τέλος) έχουμε να συγκρίνουμε 3 μεταβλητές: finger[i].id, key, this_node.id. 
 Συνολικά υπάρχουν n! μεταθέσεις, εδώ n=3, άρα n!=6.
 Όλες οι πιθανές μεταθέσεις των 3 μεταβλητών είναι οι εξής:
 
-• (finger[i].id < key < this_node.id)
-• (finger[i].id < this_node.id < key)
-• (key < finger[i].id < this_node.id)
-• (key < this_node.id < finger[i])
-• (this_node.id < finger[i].id < key)
-• (this_node.id < key < finger[i])
+- (finger[i].id < key < this_node.id)
+- (finger[i].id < this_node.id < key)
+- (key < finger[i].id < this_node.id)
+- (key < this_node.id < finger[i])
+- (this_node.id < finger[i].id < key)
+- (this_node.id < key < finger[i])
 
 Για να καθορίσουμε ποιες από τις παραπάνω συνθήκες ικανοποιούν το closest preceding finger ας πάρουμε το παρακάτω παράδειγμα:
 η αριστερή μεταβλητή: 0, η μεσαία μεταβλητή: 1, η δεξιά μεταβλητή: 7
 Εφαρμόζουμε το παράδειγμα σε κάθε συνθήκη. Τελικά οι επιθυμητές συνθήκες είναι οι εξής:
 
-1)
-(finger[i].id < key < this_node.id)
+1) (finger[i].id < key < this_node.id)
 finger[i].id=0, key=1, this_node.id=7:
 Ο κόμβος 7 ψάχνει το key 1. Το finger 0 είναι μετά τον κόμβο 7 άρα πρέπει να προωθηθεί η αναζήτηση.
 
-2)
-(key < this_node.id < finger[i])
+2) (key < this_node.id < finger[i])
 key=0, this_node.id=1, finger[i].id=7:
 Ο κόμβος 1 ψάχνει το key 0. Το finger 7 είναι μετά τον κόμβο 1 άρα πρέπει να προωθηθεί η αναζήτηση.
 
-3)
-(this_node.id < finger[i].id < key)
+3) (this_node.id < finger[i].id < key)
 this_node.id=0, finger[i].id=1, key=7
  Ο κόμβος 0 ψάχνει το key 7. Το finger 1 είναι μετά τον κόμβο 0 άρα πρέπει να προωθηθεί η αναζήτηση.
 
@@ -71,31 +64,28 @@ pred_node.id, key, this_node.id.
 Συνολικά υπάρχουν n! μεταθέσεις, εδώ n=3, άρα n!=6.
 Όλες οι πιθανές μεταθέσεις των 3 μεταβλητών είναι οι εξής:
 
-• (pred_node.id < key < this_node.id)
-• (pred_node.id < this_node.id < key)
-• (key < pred_node.id < this_node.id)
-• (key < this_node.id < pred_node.id)
-• (this_node.id < pred_node.id < key)
-• (this_node.id < key < pred_node.id)
+- (pred_node.id < key < this_node.id)
+- (pred_node.id < this_node.id < key)
+- (key < pred_node.id < this_node.id)
+- (key < this_node.id < pred_node.id)
+- (this_node.id < pred_node.id < key)
+- (this_node.id < key < pred_node.id)
 
 Για να καθορίσουμε ποιες από τις παραπάνω συνθήκες χρειαζόμαστε, ας πάρουμε το παρακάτω παράδειγμα:
 η αριστερή μεταβλητή: 0, η μεσαία μεταβλητή: 1, η δεξιά μεταβλητή: 7
 Εφαρμόζουμε το παράδειγμα σε κάθε συνθήκη. Τελικά οι επιθυμητές συνθήκες είναι οι εξής:
 
-1)
-(pred_node.id < this_node.id < key)
+1) (pred_node.id < this_node.id < key)
 pred_node.id=0, this_node.id=1, key=7:
 Ο κόμβος 1 έχει το κλειδί 7, άρα succ(7)=1. Όταν συνδεθεί ο κόμβος 0, τότε succ(7)=0.
 Άρα το κλειδί 7 πρέπει να σταλεί στον κόμβο 0.
 
-2)
-(key < pred_node.id < this_node.id)
+2) (key < pred_node.id < this_node.id)
 key=0, pred_node.id=1, this_node.id=7:
 Ο κόμβος 7 έχει το κλειδί 0, άρα succ(0)=7. Όταν συνδεθεί ο κόμβος 1, τότε succ(0)=1.
 Άρα το κλειδί 0 πρέπει να σταλεί στον κόμβο 1.
 
-3)
-(this_node.id < key < pred_node.id)
+3) (this_node.id < key < pred_node.id)
 this_node.id=0, key=1, pred_node.id=7:
 Ο κόμβος 0 έχει το κλειδί 1, άρα succ(1)=0. Όταν συνδεθεί ο κόμβος 7, τότε succ(1)=7.
 Άρα το κλειδί 1 πρέπει να σταλεί στον κόμβο 7.
