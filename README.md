@@ -93,3 +93,34 @@ this_node.id=0, key=1, pred_node.id=7:
 Επίσης υπάρχει ακόμα μία περίπτωση στην οποία πρέπει να σταλεί το κλειδί:
 αν το κλειδί είναι ίσο με το id του predecessor -> (key == pred_node.id)
 
+
+### Screenshots
+
+**IPs**
+![IPs](/Screenshots/0_IPS.PNG)
+
+**Keys**
+![keys](/Screenshots/1_KEYS.PNG)
+
+**Finger Tables**
+
+The j=0 is the correct value of the finger table entry, which corresponds to the case that all nodes of the Chord ring are connected.
+The j=1 is the real value of the finger table entry, only pointing to the nodes which are connected to the Chord ring.
+![finger_table](/Screenshots/2_FINGERS.PNG)
+
+**Crucial Data**
+![crucial_data](/Screenshots/3_CRUCIAL_DATA.PNG)
+
+**Route Files**
+![files](/Screenshots/4_FILES.PNG)
+
+**Memcache**
+![cache](/Screenshots/5_CACHE.PNG)
+
+**Request Client**
+
+![request](/Screenshots/request.PNG)
+
+**Route Map**
+
+![map](/Screenshots/map.PNG)
