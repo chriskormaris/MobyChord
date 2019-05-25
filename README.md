@@ -4,6 +4,18 @@
 
 ### Πολύβιος Λιόσης, Κορμαρής Χρήστος, Μποτονάκης Δημήτριος
 
+
+**Video Demos**
+
+[MobyChord Demonstration](https://www.youtube.com/watch?v=JRSBxeAg6Mo&feature=youtu.be)
+
+[MobyChord Simulation (Nodes: 6, 7, 0)](https://www.youtube.com/watch?v=6_RVweUqYbw)
+
+[MobyChord Simulation (Nodes; 4, 1, 7)](https://www.youtube.com/watch?v=pip0wTNiXAQ)
+
+[MobyChord Simulation (Nodes: 0, 1, 2, 3)](https://www.youtube.com/watch?v=qBED2lIQkvU)
+
+
 Ο κόμβος που κάνει request ζητάει από έναν προκαθορισμένο κόμβο του Chord που επιλέγει, το μονοπάτι (route).
 Το id του route είναι το srcPostalCode και το dstPostalCode μαζί hashαρισμένα.
 Τα postal code ο client τα παίρνει μέσω της getPostalCodeFromLocation,
@@ -123,13 +135,3 @@ this_node.id=0, key=1, pred_node.id=7:
 **Route Map**
 
 ![map](/Screenshots/map.PNG)
-
-**Video Demos**
-
-[MobyChord Demonstration](https://www.youtube.com/watch?v=JRSBxeAg6Mo&feature=youtu.be)
-
-[MobyChord Simulation (Nodes: 6, 7, 0)](https://www.youtube.com/watch?v=6_RVweUqYbw)
-
-[MobyChord Simulation (Nodes; 4, 1, 7)](https://www.youtube.com/watch?v=pip0wTNiXAQ)
-
-[MobyChord Simulation (Nodes: 0, 1, 2, 3)](https://www.youtube.com/watch?v=qBED2lIQkvU)
