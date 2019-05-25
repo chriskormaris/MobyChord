@@ -103,8 +103,8 @@ this_node.id=0, key=1, pred_node.id=7:
 
 **Finger Tables**
 
-The j=0 is the correct value of the finger table entry, which corresponds to the case that all nodes of the Chord ring are connected.
-The j=1 is the real value of the finger table entry, only pointing to the nodes which are connected to the Chord ring.
+Η τιμή j=0 είναι η σωστή τιμή της τρέχουσας καταχώρισης του finger table, η οποία αντιστοιχεί στην περίπτωση που όλοι οι κόμβοι του Chord δακτύλιου είναι συνδεδεμένοι.
+Η τιμή j=1 είναι η πραγματική τιμή της τρέχουσας καταχώρισης του finger table, η οποία δείχνει μόνο σε κόμβους του Chord δακτύλιου που είναι ήδη συνδεδεμένοι.
 ![finger_table](/Screenshots/2_FINGERS.PNG)
 
 **Crucial Data**
@@ -123,3 +123,13 @@ The j=1 is the real value of the finger table entry, only pointing to the nodes 
 **Route Map**
 
 ![map](/Screenshots/map.PNG)
+
+**Video Demos**
+
+[MobyChord Demonstration](https://www.youtube.com/watch?v=JRSBxeAg6Mo&feature=youtu.be)
+
+[MobyChord Simulation (Nodes: 6, 7, 0)](https://www.youtube.com/watch?v=6_RVweUqYbw)
+
+[MobyChord Simulation (Nodes; 4, 1, 7)](https://www.youtube.com/watch?v=pip0wTNiXAQ)
+
+[MobyChord Simulation (Nodes: 0, 1, 2, 3)](https://www.youtube.com/watch?v=qBED2lIQkvU)
