@@ -20,24 +20,22 @@
 Το id του route είναι το srcPostalCode και το dstPostalCode μαζί hashαρισμένα.
 Τα postal code ο client τα παίρνει μέσω της getPostalCodeFromLocation,
 ενώ μέσω της getLatLngFromPostalCode παίρνει τις αντίστοιχες συντεταγμένες.
-Η getLatLngFromPostalCode παίρνει σαν όρισμα ένα postal code, με το πρόθεμα "GREECE" να προηγείται,
-ώστε να γίνει αντιληπτό από το σύστημα ότι πρόκειται για postal codes από Ελλάδα.
+Η getLatLngFromPostalCode παίρνει σαν όρισμα ένα postal code.
 Όταν βρει όλες τις παραμέτρους ο client, τις περιλαμβάνει στο passInfo και στέλνει το request.
 Ο κόμβος που διάλεξε ο client εκτελεί lookUp η οποία επαναλαμβάνεται στον εκάστοτε closest preceding finger κόμβο,
-έως ότου βρεθεί ο κόμβος με το key που αντιστοιχεί στο μονοπάτι. Να σημειωθεί ότι η lookUp δουλεύει επιτυχώς.
-Κατόπιν, γίνεται έλεγχος αν υπάρχει το αρχείο στον δίσκο.
-Αν δεν υπάρχει, ο κόμβος στέλνει request στη Google για να λάβει το json μονοπάτι και να το αποθηκεύσει
-σε αρχείο. To αρχείο έχει όνομα της εξής μορφής: hashId + "_GREECE_" + srcPostalCode + "_GREECE_" + dstPostalCode + ".json".
-Το όνομα του αρχείου χωρίς το hashId και την κατάληξη ("GREECE_" + srcPostalCode + "_GREECE_" + dstPostalCode)
-είναι το String που περνάει από τη Hash συνάρτηση για να μας δώσει το id του κόμβου στον οποίο πρέπει να είναι αποθηκευμένο.
-Στη συνέχεια το hashId του αρχείου προστίθεται ως πρόθεμα στο όνομα του αρχείου.
-Παράδειγμα ονομασίας json αρχείου με πληροφορίες για ένα Route: "3_GREECE_15771_GREECE_11362.json"
-Στη συνέχεια, τα περιεχόμενα του json αρχείου στέλνονται πίσω στον client για να ζωγραφιστεί τελικώς το μονοπάτι στο χάρτη.
+έως ότου βρεθεί ο κόμβος με το key που αντιστοιχεί στο μονοπάτι. Κατόπιν, γίνεται έλεγχος αν υπάρχει το αρχείο στον δίσκο.
+Αν δεν υπάρχει, ο κόμβος στέλνει request στη Google για να λάβει το json μονοπάτι και να το αποθηκεύσει σε αρχείο. 
+To αρχείο έχει όνομα της εξής μορφής: hashId + "_" + srcPostalCode + "_" + dstPostalCode + ".json".
+Το String που περνάει στην συνάρτηση κατακερματισμού, είναι το εξής: **srcPostalCode + "_" + dstPostalCode**.
+Η συνάρτηση κατακερματισμού "hash" θα μας δώσει το id του κόμβου στον οποίο πρέπει να είναι αποθηκευμένο.
+Στη συνέχεια το "hashId" του αρχείου προστίθεται ως πρόθεμα στο όνομα του αρχείου.
+Παράδειγμα ονομασίας json αρχείου με πληροφορίες για ένα Route: "3_15771_11362.json"
+Τέλος, τα περιεχόμενα του json αρχείου στέλνονται πίσω στον client για να ζωγραφιστεί η διαδρομή στο χάρτη.
 
 **ΣΧΟΛΙΟ:** Η ΕΡΓΑΣΙΑ ΔΟΥΛΕΨΕ ΣΕ ΠΡΑΓΜΑΤΙΚΑ ΚΙΝΗΤΑ.
 
 
-Συνθήκες για το αν ένας κόμβος είναι closest preceding finger ενός άλλου.
+### Συνθήκες για το αν ένας κόμβος είναι closest preceding finger ενός άλλου
 Για κάθε finger[i] του finger table (ξεκινώντας από το τέλος) έχουμε να συγκρίνουμε 3 μεταβλητές: finger[i].id, key, this_node.id. 
 Συνολικά υπάρχουν n! μεταθέσεις, εδώ n=3, άρα n!=6.
 Όλες οι πιθανές μεταθέσεις των 3 μεταβλητών είναι οι εξής:
@@ -108,30 +106,30 @@ this_node.id=0, key=1, pred_node.id=7:
 ### Screenshots
 
 **IPs**
-![IPs](/Screenshots/0_IPS.PNG)
+![IPs](/Screenshots/0_ips.png)
 
 **Keys**
-![keys](/Screenshots/1_KEYS.PNG)
+![keys](/Screenshots/1_keys.png)
 
 **Finger Tables**
 
 Η τιμή j=0 είναι η σωστή τιμή της τρέχουσας καταχώρισης του finger table, η οποία αντιστοιχεί στην περίπτωση που όλοι οι κόμβοι του Chord δακτύλιου είναι συνδεδεμένοι.
 Η τιμή j=1 είναι η πραγματική τιμή της τρέχουσας καταχώρισης του finger table, η οποία δείχνει μόνο σε κόμβους του Chord δακτύλιου που είναι ήδη συνδεδεμένοι.
-![finger_table](/Screenshots/2_FINGERS.PNG)
+![finger_table](/Screenshots/2_fingers.png)
 
 **Crucial Data**
-![crucial_data](/Screenshots/3_CRUCIAL_DATA.PNG)
+![crucial_data](/Screenshots/3_crucial_data.png)
 
 **Route Files**
-![files](/Screenshots/4_FILES.PNG)
+![files](/Screenshots/4_files.png)
 
 **Memcache**
-![cache](/Screenshots/5_CACHE.PNG)
+![cache](/Screenshots/5_cache.png)
 
 **Request Client**
 
-![request](/Screenshots/request.PNG)
+![request](/Screenshots/request.png)
 
 **Route Map**
 
-![map](/Screenshots/map.PNG)
+![map](/Screenshots/map.png)

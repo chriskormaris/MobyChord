@@ -9,7 +9,7 @@ public class Hashing {
 	// Generates an sha1 hash from a given string.
 	// Then it sums up all the numeric digits in the hash
 	// and returns the modulo of the division by the offset.
-	public static int Hash(String content, int offset) {
+	public static int hash(String content, int offset) {
 		/*** step 1, hash content using sha1 ***/
 		SimpleSHA1 sha1 = new SimpleSHA1();
 		String hashedContent = sha1.SHA1(content);
@@ -119,10 +119,10 @@ public class Hashing {
 				+ "]\"";
 		*/
 		
-        String liosiaPostalCode = "GREECE_13341"; // zip code for Liosa
-        String zografouPostalCode = "GREECE_15772"; // zip code for Zografou
-        String thessalonikiPostalCode = "GREECE_54351"; // zip code for Thessaloniki
-		String auebPostalCode = "GREECE_10434"; // zip code for AUEB
+        String liosiaPostalCode = "13341"; // zip code for Liosa
+        String zografouPostalCode = "15772"; // zip code for Zografou
+        String thessalonikiPostalCode = "54351"; // zip code for Thessaloniki
+		String auebPostalCode = "10434"; // zip code for AUEB
 
         String fromLiosiaToAueb = auebPostalCode + "_" + liosiaPostalCode;
 		int LiosiaToAuebId = Hash(fromLiosiaToAueb, 8);
