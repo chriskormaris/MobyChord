@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "397012046313",
+    "firebase_url": "https://mobychord.firebaseio.com",
+    "project_id": "mobychord",
+    "storage_bucket": "mobychord.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397012046313:android:eddab9f3045905b7213b78",
+        "android_client_info": {
+          "package_name": "msc_aueb_gr_pol_liosis.mobychord"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397012046313-67e294mgaesi81oiquhklmuc8mf8j5sl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "msc_aueb_gr_pol_liosis.mobychord",
+            "certificate_hash": "d0ce3013c2139615802923eacdca8991bf3f0a6f"
+          }
+        },
+        {
+          "client_id": "397012046313-qvsct99h3vg2pmko4eevfom02um6mhs0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB87M3xdb8m0IJwQkJFqtxaAEbUgmzWL7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397012046313-qvsct99h3vg2pmko4eevfom02um6mhs0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

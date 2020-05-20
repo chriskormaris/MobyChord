@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/map_of_greece">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="Client IP (optional):"
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignBaseline="@+id/clientIP"
+            android:layout_alignBottom="@+id/clientIP"
+            android:layout_toLeftOf="@+id/clientIP"
+            android:layout_toStartOf="@+id/clientIP"
+            android:textStyle="normal|bold"
+            android:textColor="@android:color/white" />
+
+        <EditText
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:id="@+id/clientIP"
+            android:hint="0.0.0.0"
+            android:textColorHint="@color/gray"
+            android:inputType="phone"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:text="Ask Node IP:"
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:layout_alignBaseline="@+id/askNodeIP"
+            android:layout_alignBottom="@+id/askNodeIP"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/askNodeIP"
+            android:layout_toStartOf="@+id/askNodeIP"
+            android:textStyle="normal|bold"
+            android:textColor="@android:color/white" />
+
+        <EditText
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:id="@+id/askNodeIP"
+            android:hint="0.0.0.0"
+            android:textColorHint="@color/gray"
+            android:inputType="phone"
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/textView4"
+            android:layout_toRightOf="@+id/textView4"
+            android:layout_toEndOf="@+id/textView4" />
+
+        <TextView
+            android:text="Start Location:"
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:layout_alignBaseline="@+id/srcLocation"
+            android:layout_alignBottom="@+id/srcLocation"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/srcLocation"
+            android:layout_toStartOf="@+id/srcLocation"
+            android:textStyle="normal|bold"
+            android:textColor="@android:color/white" />
+
+        <EditText
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:id="@+id/srcLocation"
+            android:hint="Zografos"
+            android:textColorHint="@color/gray"
+            android:layout_below="@+id/askNodeIP"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:inputType="text"
+            android:text="Papagou 10, Zografos"
+            android:textColor="@android:color/white" />
+
+        <RadioGroup
+            android:id="@+id/radioSex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/srcLocation"
+            android:layout_alignLeft="@+id/srcLocation"
+            android:layout_alignStart="@+id/srcLocation"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:text="manual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonManual"
+                android:checked="true"
+                android:textStyle="normal|bold" />
+
+            <RadioButton
+                android:text="gps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonGPS"
+                android:textStyle="normal|bold" />
+
+        </RadioGroup>
+
+        <TextView
+            android:text="Destination Location:"
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:layout_alignBaseline="@+id/dstLocation"
+            android:layout_alignBottom="@+id/dstLocation"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/dstLocation"
+            android:layout_toStartOf="@+id/dstLocation"
+            android:textStyle="normal|bold"
+            android:textColor="@android:color/white" />
+
+        <EditText
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:id="@+id/dstLocation"
+            android:hint="AUEB"
+            android:textColorHint="@color/gray"
+            android:inputType="textPostalAddress"
+            android:text="AUEB"
+            android:layout_below="@+id/radioSex"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="@android:color/white" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_above="@+id/routeButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/progressBar"
+            android:visibility="invisible" />
+
+        <Button
+            android:text="Find Route"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/routeButton"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="12dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>
