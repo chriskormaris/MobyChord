@@ -1,8 +1,11 @@
 package msc_aueb_gr_pol_liosis.mobychord;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -131,8 +134,8 @@ public class RequestClient extends AppCompatActivity {
         }
 
         if (buttonGPS.isChecked()) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED) {
                 return false;
             }
             gps = new GPSTracker(this);
@@ -159,7 +162,7 @@ public class RequestClient extends AppCompatActivity {
             srcLatLng = getLatLngFromLocationName(srcLocationName);
             Log.d("SRC_LATLNG", srcLatLng.toString());
         }
-        
+
         dstLocationName = ((EditText) findViewById(R.id.dstLocation)).getText().toString();
         dstPostalCode = getPostalCodeFromLocationName(dstLocationName);
 
@@ -169,7 +172,7 @@ public class RequestClient extends AppCompatActivity {
             return false;
         }
 
-//        dstLatLng = getLatLngFromPostalCode("GREECE " + dstPostalCode);
+        // dstLatLng = getLatLngFromPostalCode("GREECE " + dstPostalCode);
         dstLatLng = getLatLngFromLocationName(dstLocationName);
 
         initialAskNodeIP = ((EditText) findViewById(R.id.askNodeIP)).getText().toString();
@@ -189,7 +192,7 @@ public class RequestClient extends AppCompatActivity {
 
     private String getPostalCodeFromLatLng(LatLng latlng) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        Log.d("GEO_IS_PRESENT", geocoder.isPresent() + "");
+        Log.d("GEO_IS_PRESENT", Geocoder.isPresent() + "");
 
         Address address;
         String postalCode = "";
@@ -208,7 +211,7 @@ public class RequestClient extends AppCompatActivity {
     // get location from a given location name
     public String getPostalCodeFromLocationName(String location) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        Log.d("GEO_IS_PRESENT", geocoder.isPresent() + "");
+        Log.d("GEO_IS_PRESENT", Geocoder.isPresent() + "");
 
         Address address;
         String postalCode = "";
@@ -232,7 +235,7 @@ public class RequestClient extends AppCompatActivity {
 
     private LatLng getLatLngFromLocationName(String locationName) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        Log.d("IS_PRESENT", geocoder.isPresent() + "");
+        Log.d("IS_PRESENT", Geocoder.isPresent() + "");
 
         double latitude = 0;
         double longitude = 0;
@@ -242,33 +245,40 @@ public class RequestClient extends AppCompatActivity {
                 // Use the address as needed
                 latitude = address.getLatitude();
                 longitude = address.getLongitude();
-                String message = String.format("Latitude: %f, Longitude: %f",
-                        address.getLatitude(), address.getLongitude());
+                String message = String.format(
+                        Locale.getDefault(),
+                        "Latitude: %f, Longitude: %f",
+                        address.getLatitude(),
+                        address.getLongitude()
+                );
                 Log.d("COORDINATES", message);
             } else {
                 // Display appropriate message when Geocoder services are not available
                 Log.d("COORDINATES", "ERROR");
             }
-        } catch (IOException e) {
+        } catch (IOException ex) {
             // handle exception
+            ex.printStackTrace();
         }
         return new LatLng(latitude, longitude);
     }
 
     private void beginClientRequestRouteFromNode() {
 
-        RequestRouteFromNode requestRouteFromNodeThread = new RequestRouteFromNode(clientIpAddress, initialAskNodeIP, passInfo);
+        RequestRouteFromNode requestRouteFromNodeThread = new RequestRouteFromNode(
+                clientIpAddress,
+                initialAskNodeIP,
+                passInfo
+        );
         requestRouteFromNodeThread.start();
 
     }
 
     private void openRetrieveRouteServer() {
-
         System.out.println("Opening RetrieveRouteServer...");
 
         Thread miniServerThread = new RetrieveRouteThread(getContext());
         miniServerThread.start();
-
     }
 
     private class RetrieveRouteThread extends Thread {

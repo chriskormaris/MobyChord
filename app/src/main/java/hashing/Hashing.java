@@ -5,34 +5,34 @@ package hashing;
 //********************************* Dimitris Botonakis *********************************//
 
 public class Hashing {
-	
-	// Generates an sha1 hash from a given string.
-	// Then it sums up all the numeric digits in the hash
-	// and returns the modulo of the division by the offset.
-	public static int Hash(String content, int offset) {
-		/*** step 1, hash content using sha1 ***/
-		SimpleSHA1 sha1 = new SimpleSHA1();
-		String hashedContent = sha1.SHA1(content);
-		System.out.println(hashedContent);
-		
-		/*** step 2, sum up the numeric values ***/
-		int sum = 0;
-		for (int i=0; i<hashedContent.length(); i++) {
-			if (Character.isDigit(hashedContent.charAt(i))) {
-				int digit = Character.getNumericValue(hashedContent.charAt(i));
-				sum += digit;
-			}
-		}
-		System.out.println("sum: " + sum);
-		
-		/*** step 3, get a modulo of the sum ***/
-		int id = sum % offset; // values from 0 to offset - 1
-		
-		return id;
-	}
 
-	// test the hash function
-	public static void main(String[] args) {
+    // Generates an sha1 hash from a given string.
+    // Then it sums up all the numeric digits in the hash
+    // and returns the modulo of the division by the offset.
+    public static int Hash(String content, int offset) {
+        /*** step 1, hash content using sha1 ***/
+        SimpleSHA1 sha1 = new SimpleSHA1();
+        String hashedContent = sha1.SHA1(content);
+        System.out.println(hashedContent);
+
+        /*** step 2, sum up the numeric values ***/
+        int sum = 0;
+        for (int i = 0; i < hashedContent.length(); i++) {
+            if (Character.isDigit(hashedContent.charAt(i))) {
+                int digit = Character.getNumericValue(hashedContent.charAt(i));
+                sum += digit;
+            }
+        }
+        System.out.println("sum: " + sum);
+
+        /*** step 3, get a modulo of the sum ***/
+        int id = sum % offset; // values from 0 to offset - 1
+
+        return id;
+    }
+
+    // test the hash function
+    public static void main(String[] args) {
 		/*
 		String content = "["
 				+ "{\"bounds\":"
@@ -118,27 +118,27 @@ public class Hashing {
 				+ "\"waypoint_order\":[]}"
 				+ "]\"";
 		*/
-		
+
         String liosiaPostalCode = "13341"; // zip code for Liosa
         String zografouPostalCode = "15772"; // zip code for Zografou
         String thessalonikiPostalCode = "54351"; // zip code for Thessaloniki
-		String auebPostalCode = "10434"; // zip code for AUEB
+        String auebPostalCode = "10434"; // zip code for AUEB
 
         String fromLiosiaToAueb = auebPostalCode + "_" + liosiaPostalCode;
-		int LiosiaToAuebId = Hash(fromLiosiaToAueb, 8);
-		System.out.println("AUEB to Liosia id: " + LiosiaToAuebId);
-		System.out.println();
-		
+        int LiosiaToAuebId = Hash(fromLiosiaToAueb, 8);
+        System.out.println("AUEB to Liosia id: " + LiosiaToAuebId);
+        System.out.println();
+
         String fromZografouToAueb = auebPostalCode + "_" + zografouPostalCode;
         int ZografouToAuebId = Hash(fromZografouToAueb, 8);
-		System.out.println("Zografou to AUEB id: " + ZografouToAuebId);
-		System.out.println();
+        System.out.println("Zografou to AUEB id: " + ZografouToAuebId);
+        System.out.println();
 
         String fromThessalonikiToAUEB = auebPostalCode + "_" + thessalonikiPostalCode;
         int ThessalonikiToAUEBId = Hash(fromThessalonikiToAUEB, 8);
-		System.out.println("id: " + ThessalonikiToAUEBId);
-		System.out.println();
-		
-	}
+        System.out.println("id: " + ThessalonikiToAUEBId);
+        System.out.println();
+
+    }
 
 }

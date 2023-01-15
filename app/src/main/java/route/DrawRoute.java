@@ -1,5 +1,6 @@
 package route;
 
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -25,8 +26,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import msc_aueb_gr_pol_liosis.mobychord.R;
 
@@ -36,12 +38,12 @@ import msc_aueb_gr_pol_liosis.mobychord.R;
 //********************************* Dimitris Botonakis *********************************//
 
 
-public class DrawRoute extends FragmentActivity implements OnMapReadyCallback  {
+public class DrawRoute extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private MarkerOptions options = new MarkerOptions();
-    private ArrayList<LatLng> latlngs = new ArrayList<>();
-    private ArrayList<Marker> markers = new ArrayList<>();
+    private List<LatLng> latlngs = new ArrayList<>();
+    private List<Marker> markers = new ArrayList<>();
 
     private String srcPostalCode = "";
     private String dstPostalCode = "";
@@ -55,12 +57,9 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
     }
-
 
     // get location from a given location name
     public LatLng getLatLngFromLocationName(String locationName) {
@@ -73,15 +72,20 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback  {
                 // Use the address as needed
                 latitude = address.getLatitude();
                 longitude = address.getLongitude();
-                String message = String.format("Latitude: %f, Longitude: %f",
-                        address.getLatitude(), address.getLongitude());
+                String message = String.format(
+                        Locale.getDefault(),
+                        "Latitude: %f, Longitude: %f",
+                        address.getLatitude(),
+                        address.getLongitude()
+                );
                 Log.d("COORDINATES", message);
             } else {
                 // Display appropriate message when Geocoder services are not available
                 Log.d("COORDINATES", "ERROR");
             }
-        } catch (IOException e) {
+        } catch (IOException ex) {
             // handle exception
+            ex.printStackTrace();
         }
         return new LatLng(latitude, longitude);
     }
@@ -100,6 +104,7 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback  {
         mMap = googleMap;
 
         Bundle extras = getIntent().getExtras();
+
         if (extras.size() >= 3) {
             srcPostalCode = extras.getString("srcPostalCode");
             dstPostalCode = extras.getString("dstPostalCode");
@@ -112,8 +117,8 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback  {
             Log.d("jsonRoute", jsonRoute);
         }
 
-//        srcLocation = getLatLngFromLocationName("GREECE " + srcPostalCode);
-//        dstLocation = getLatLngFromLocationName("GREECE " + dstPostalCode);
+        // srcLocation = getLatLngFromLocationName("GREECE " + srcPostalCode);
+        // dstLocation = getLatLngFromLocationName("GREECE " + dstPostalCode);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -147,23 +152,25 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback  {
             jsonRoute = jsonRoute.substring(1);
         }
         if (jsonRoute.endsWith("]")) {
-            jsonRoute = jsonRoute.substring(0, jsonRoute.length()-2);
+            jsonRoute = jsonRoute.substring(0, jsonRoute.length() - 2);
         }
 
         // Invokes the thread for parsing the JSON data
         parserTask.execute(jsonRoute);
-
     }
 
-    /** A class to parse the Google Places in JSON format */
-    private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>> > {
+    /**
+     * A class to parse the Google Places in JSON format
+     */
+    @SuppressLint("StaticFieldLeak")
+    private class ParserTask extends AsyncTask<String, Integer, List<Map<String, String>>> {
 
         // Parsing the data in non-ui thread
         @Override
-        protected List<HashMap<String, String>> doInBackground(String... jsonRoute) {
+        protected List<Map<String, String>> doInBackground(String... jsonRoute) {
 
             JSONObject jObject;
-            List<HashMap<String, String>> route = null;
+            List<Map<String, String>> route = null;
 
             try {
                 jObject = new JSONObject(jsonRoute[0]);
@@ -181,10 +188,10 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback  {
 
         // Executes in UI thread, after the parsing process
         @Override
-        protected void onPostExecute(List<HashMap<String, String>> result) {
+        protected void onPostExecute(List<Map<String, String>> result) {
             ArrayList<LatLng> points;
             PolylineOptions lineOptions = null;
-//            MarkerOptions markerOptions = new MarkerOptions();
+            // MarkerOptions markerOptions = new MarkerOptions();
 
             // Traversing through all the routes
             for (int i = 0; i < result.size(); i++) {
@@ -192,11 +199,11 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback  {
                 lineOptions = new PolylineOptions();
 
                 // Fetching i-th route
-                List<HashMap<String, String>> path = result;
+                List<Map<String, String>> path = result;
 
                 // Fetching all the points in i-th route
                 for (int j = 0; j < path.size(); j++) {
-                    HashMap<String, String> point = path.get(j);
+                    Map<String, String> point = path.get(j);
 
                     double lat = Double.parseDouble(point.get("lat"));
                     double lng = Double.parseDouble(point.get("lng"));
@@ -219,7 +226,6 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback  {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(srcLocation));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 4000, null);
             mMap.setTrafficEnabled(true);
-
         }
 
     }

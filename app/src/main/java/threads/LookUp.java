@@ -1,5 +1,7 @@
 package threads;
 
+import static msc_aueb_gr_pol_liosis.mobychord.ChordSize.M;
+
 import android.os.Environment;
 import android.util.Log;
 
@@ -20,7 +22,6 @@ import route.DownloadRoute;
 /**
  * Created by Chris on 1/26/2017.
  */
-
 public class LookUp extends Thread {
 
     private String passInfo;
@@ -30,8 +31,7 @@ public class LookUp extends Thread {
     private String dstPostalCode;
 
     private Memcached memcached;
-    private int[][] fingertable;
-    private int m;
+    private int[][] fingerTable;
     private int currentNodeID;
     private String currentNodeIP;
     private int forwardNodeID;
@@ -43,38 +43,33 @@ public class LookUp extends Thread {
     private String routeInfo = "";
 
     public LookUp(Memcached memcached, Set<Integer> keys, String passInfo) {
-
         this.memcached = memcached;
         this.keys = keys;
 
-        this.fingertable = memcached.getFingerTable();
-        this.m = memcached.getM();
+        this.fingerTable = memcached.getFingerTable();
         this.currentNodeID = Integer.parseInt(memcached.getNodeID());
         Log.d("current_node_ID", currentNodeID + "");
         this.currentNodeIP = memcached.getNodeIP();
         Log.d("current_node_IP", currentNodeIP);
         this.passInfo = passInfo;
-
     }
 
     @Override
     public void run() {
-
         srcPostalCode = passInfo.split("#")[1];
         dstPostalCode = passInfo.split("#")[2];
 
-//        contentToBeHashed = srcPostalCode + "_" + dstPostalCode;
+        // contentToBeHashed = srcPostalCode + "_" + dstPostalCode;
         contentToBeHashed = srcPostalCode + "_" + dstPostalCode;
         Log.d("CONTENT", contentToBeHashed);
 
         // hashId represents the node where we can find the requested route
-        int hashId = Hashing.Hash(contentToBeHashed, (int) Math.pow(2,m));
+        int hashId = Hashing.Hash(contentToBeHashed, (int) Math.pow(2, M));
         Log.d("HASH", hashId + "");
 
         routeFilename = hashId + "_" + contentToBeHashed;
 
         lookUp(hashId);
-
     }
 
     private String getIPFromID(int askNodeId) {
@@ -90,7 +85,6 @@ public class LookUp extends Thread {
     // LookUp operation.
     // Returns the closest preceding finger to the key id.
     public void lookUp(int id) {
-
         int closest_preceding_finger = -1000;
 
         if (keys.contains(id)) {
@@ -112,19 +106,19 @@ public class LookUp extends Thread {
         } else {
 
             // Iterate the finger table from end to start.
-            for (int i = fingertable.length - 1; i >= 0; i--) {
+            for (int i = fingerTable.length - 1; i >= 0; i--) {
 
                 // IT WORKS
-                if(isBetween(currentNodeID, id, fingertable[i][1])) {
-                    closest_preceding_finger = fingertable[i][1];
+                if (isBetween(currentNodeID, id, fingerTable[i][1])) {
+                    closest_preceding_finger = fingerTable[i][1];
                     break;
                 }
-                if (isBetween(id, fingertable[i][1], currentNodeID)) {
-                    closest_preceding_finger = fingertable[i][1];
+                if (isBetween(id, fingerTable[i][1], currentNodeID)) {
+                    closest_preceding_finger = fingerTable[i][1];
                     break;
                 }
-                if (isBetween(fingertable[i][1], currentNodeID, id)) {
-                    closest_preceding_finger = fingertable[i][1];
+                if (isBetween(fingerTable[i][1], currentNodeID, id)) {
+                    closest_preceding_finger = fingerTable[i][1];
                     break;
                 }
 
@@ -138,7 +132,7 @@ public class LookUp extends Thread {
                 // then set the successor as the closest preceding finger.
                 // The successor of a Node is always the first Node
                 // in its finger table.
-                closest_preceding_finger = fingertable[0][1];
+                closest_preceding_finger = fingerTable[0][1];
             }
 
             forwardNodeID = closest_preceding_finger;
@@ -148,7 +142,6 @@ public class LookUp extends Thread {
 
             forwardLookUp();
         }
-
     }
 
     private String searchRouteFile(String routeFilename) {
@@ -189,16 +182,15 @@ public class LookUp extends Thread {
             downloadNewRouteThread.start();
             try {
                 downloadNewRouteThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
             }
-//                routeInfo = getRouteContentByFileName(routeFilename + ".txt");
+            // routeInfo = getRouteContentByFileName(routeFilename + ".txt");
             routeInfo = downloadNewRouteThread.getJsonRoute();
             Log.d("routeInfo", routeInfo);
 
             // add routeInfo to cache
             memcached.addFile(routeFilename + ".json", routeInfo);
-
         }
     }
 
@@ -214,35 +206,34 @@ public class LookUp extends Thread {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
 
-            String line = "";
+            String line;
+
             /*
             while ((line = br.readLine()) != null) {
                 retrievedText = retrievedText + line;
             }
             */
+
             // ALTERNATIVE, more efficient
-            StringBuilder sb = new StringBuilder(retrievedText);
+            StringBuilder stringBuilder = new StringBuilder(retrievedText);
             while ((line = br.readLine()) != null) {
-                sb.append(line);
+                stringBuilder.append(line);
             }
-            retrievedText = sb.toString();
+            retrievedText = stringBuilder.toString();
 
             br.close();
-
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ex) {
             Log.d("ROUTE_NOT_FOUND", "Route file was not found. Download it from Google!");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
         return retrievedText;
     }
 
     private void forwardLookUp() {
-
         Thread requestRouteFromNodeThread = new Thread(new RequestRouteFromNode(currentNodeIP, forwardNodeIP, passInfo));
         requestRouteFromNodeThread.start();
-
     }
 
     public String getRouteInfo() {

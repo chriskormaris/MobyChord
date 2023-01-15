@@ -18,14 +18,12 @@ public class SendRouteToClient extends Thread {
 
     private String routeInfo;
 
-    public SendRouteToClient(String myIPAddress,
-                                     String passInfo, String routeInfo) {
-            this.myIPAddress = myIPAddress; // this node sends the route the request
+    public SendRouteToClient(String myIPAddress, String passInfo, String routeInfo) {
+        this.myIPAddress = myIPAddress;  // this node sends the route the request
 
-            this.routeInfo = routeInfo;
+        this.routeInfo = routeInfo;
 
-            this.clientIP = passInfo.split("#")[7];
-
+        this.clientIP = passInfo.split("#")[7];
     }
 
     @Override
@@ -33,11 +31,10 @@ public class SendRouteToClient extends Thread {
         Log.d("Request", "Node at IP: " + myIPAddress + " sending route to client Node at IP: " + clientIP);
 
         Socket requestSocket = null;
-        ObjectOutputStream out;
+        ObjectOutputStream out = null;
         final int clientPort = 6666;
 
         try {
-
             requestSocket = new Socket(this.clientIP, clientPort);
 
             out = new ObjectOutputStream(requestSocket.getOutputStream());
@@ -46,17 +43,18 @@ public class SendRouteToClient extends Thread {
             out.flush();
 
             Log.d("Request", "Route sent to Client ------> " + this.routeInfo);
-
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         } finally {
             try {
                 if (requestSocket != null) {
-//                    out.close();
+                    if (out != null) {
+                        out.close();
+                    }
                     requestSocket.close();
                 }
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }

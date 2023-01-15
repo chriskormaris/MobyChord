@@ -35,7 +35,7 @@ import threads.OfferServiceToConnectedUser;
 
 public class Node extends AppCompatActivity {
 
-    private final int m = ChordSize.m;
+    private final int m = ChordSize.M;
 
     //**********GUI Variables**********
     private Button disconnectButton;
@@ -114,7 +114,7 @@ public class Node extends AppCompatActivity {
             @Override
             public void onClick (View v) {
                 //Print fingerTable in logs
-                memcached.printFingertable();
+                memcached.printFingerTable();
 
                 //Print fingertable inside LogArea
                 ftable = memcached.getFingerTable();
@@ -237,7 +237,7 @@ public class Node extends AppCompatActivity {
         memcached.computeFingerTableValues();
 
         // Print starting fingertable
-        memcached.printFingertable();
+        memcached.printFingerTable();
 
         // Update Gui Environment
         this.myIdTV.setText("Node: " + this.myID);
@@ -519,7 +519,7 @@ public class Node extends AppCompatActivity {
     }
 
     private void printMemcachedFiles(EditText text) {
-        for (Map.Entry<String, Integer> entry : memcached.files_frequencies.entrySet()) {
+        for (Map.Entry<String, Integer> entry : memcached.fileFrequencies.entrySet()) {
             Log.d("Memcached", "filename: " + entry.getKey() + ", frequency: " + entry.getValue());
             text.append(entry.getKey() + ", frequency: " + entry.getValue());
             text.append("\n");

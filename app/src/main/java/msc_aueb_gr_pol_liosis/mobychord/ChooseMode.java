@@ -28,18 +28,14 @@ public class ChooseMode extends Activity {
         makeRequestButton = (Button) this.findViewById(R.id.makeRequestButton);
         makeNodeButton = (Button) this.findViewById(R.id.makeNodeButton);
 
-        makeRequestButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick (View v)
-            {
+        makeRequestButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 makeNewRequest();
             }
         });
 
-        makeNodeButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick (View v)
-            {
+        makeNodeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 newChordNodeRequest();
             }
         });
@@ -61,37 +57,34 @@ public class ChooseMode extends Activity {
     private void createAppDirectories() {
         File folder = new File(Environment.getExternalStorageDirectory() +
                 File.separator + "mobyChord");
-        boolean success = true;
         if (!folder.exists()) {
-            success = folder.mkdirs();
+            folder.mkdirs();
         }
 
         folder = new File(Environment.getExternalStorageDirectory() +
                 File.separator + "mobyChord/Node");
-        success = true;
         if (!folder.exists()) {
-            success = folder.mkdirs();
+            folder.mkdirs();
         }
 
-//        folder = new File(Environment.getExternalStorageDirectory() +
-//                File.separator + "mobyChord/Client");
-//        success = true;
-//        if (!folder.exists()) {
-//            success = folder.mkdirs();
-//        }
+        /*
+        folder = new File(Environment.getExternalStorageDirectory() +
+                File.separator + "mobyChord/Client");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        */
 
         folder = new File(Environment.getExternalStorageDirectory() +
                 File.separator + "mobyChord/Node/Net Architecture");
-        success = true;
         if (!folder.exists()) {
-            success = folder.mkdirs();
+            folder.mkdirs();
         }
 
         folder = new File(Environment.getExternalStorageDirectory() +
                 File.separator + "mobyChord/Node/Keys");
-        success = true;
         if (!folder.exists()) {
-            success = folder.mkdirs();
+            folder.mkdirs();
         }
 
     }

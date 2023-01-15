@@ -18,16 +18,14 @@ public class RequestRouteFromNode extends Thread {
     private String myIPAddress;
     private String askNodeIP;
 
-    public RequestRouteFromNode(String myIPAddress, String askNodeIP,
-                                String passInfo) {
-            // this node makes the request
-            this.myIPAddress = myIPAddress;
+    public RequestRouteFromNode(String myIPAddress, String askNodeIP, String passInfo) {
+        // this node makes the request
+        this.myIPAddress = myIPAddress;
 
-            // this nodes will run lookup next
-            this.askNodeIP = askNodeIP;
+        // this nodes will run lookup next
+        this.askNodeIP = askNodeIP;
 
-            this.passInfo = passInfo;
-
+        this.passInfo = passInfo;
     }
 
     @Override
@@ -38,7 +36,6 @@ public class RequestRouteFromNode extends Thread {
         ObjectOutputStream out;
 
         try {
-
             requestSocket = new Socket(this.askNodeIP, 3300);
 
             out = new ObjectOutputStream(requestSocket.getOutputStream());
@@ -50,16 +47,15 @@ public class RequestRouteFromNode extends Thread {
             out.flush();
 
             Log.d("Request", "Info sent to Ask Node ------> " + this.passInfo);
-
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         } finally {
             try {
                 if (requestSocket != null) {
                     requestSocket.close();
                 }
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }

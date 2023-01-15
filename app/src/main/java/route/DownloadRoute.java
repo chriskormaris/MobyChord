@@ -21,15 +21,13 @@ import java.net.URL;
 
 public class DownloadRoute extends Thread {
 
-    private String routeFilename = "";
+    private String routeFilename;
     private LatLng srcLocation;
     private LatLng dstLocation;
 
     private String jsonRoute = "";
 
-
-    public DownloadRoute(String routeFilename,
-                         LatLng srcLocation, LatLng dstLocation) {
+    public DownloadRoute(String routeFilename, LatLng srcLocation, LatLng dstLocation) {
         this.routeFilename = routeFilename;
         this.srcLocation = srcLocation;
         this.dstLocation = dstLocation;
@@ -38,12 +36,10 @@ public class DownloadRoute extends Thread {
         Log.d("srcLocation longitude", srcLocation.longitude + "");
         Log.d("dstLocation latitude", dstLocation.latitude + "");
         Log.d("dstLocation longitude", dstLocation.longitude + "");
-
     }
 
     @Override
     public void run() {
-
         System.out.println("Inside download route class.");
 
         Log.d("SRC_LOCATION", srcLocation.toString());
@@ -61,7 +57,6 @@ public class DownloadRoute extends Thread {
 
     private void saveToFile(String filename, String data) {
         try {
-
             File file = new File(Environment.getExternalStorageDirectory()
                     + "/mobyChord/Node/", "Keys");
             // if dirPath exists and folder with name Keys
@@ -75,37 +70,35 @@ public class DownloadRoute extends Thread {
             writer.close();
             Log.d("FILE_CREATED", "File generated with name \"" + filename + "\"");
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private String getDirectionsUrl(LatLng origin, LatLng dest){
-
-
+    private String getDirectionsUrl(LatLng origin, LatLng dest) {
         // Origin of route
-        String str_origin = "origin="+origin.latitude+","+origin.longitude;
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
 
         // Destination of route
-        String str_dest = "destination="+dest.latitude+","+dest.longitude;
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
         // Sensor enabled
         String sensor = "sensor=false";
 
         // Building the parameters to the web service
-        String parameters = str_origin+"&"+str_dest+"&"+sensor;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
 
         // Output format
         String output = "json";
 
         // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
-
-        return url;
+        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
     }
 
 
-    /** A method to download json data from url */
+    /**
+     * A method to download json data from url
+     */
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
@@ -124,21 +117,20 @@ public class DownloadRoute extends Thread {
 
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
 
-            StringBuffer sb = new StringBuffer();
+            StringBuffer stringBuffer = new StringBuffer();
 
-            String line = "";
-            while( ( line = br.readLine()) != null){
-                sb.append(line);
+            String line;
+            while ((line = br.readLine()) != null) {
+                stringBuffer.append(line);
             }
 
-            data = sb.toString();
+            data = stringBuffer.toString();
 
             br.close();
-
-        } catch(Exception e){
+        } catch (Exception e) {
             // Exception while downloading url
             Log.d("Exception", e.toString());
-        } finally{
+        } finally {
             iStream.close();
             urlConnection.disconnect();
         }
@@ -148,27 +140,27 @@ public class DownloadRoute extends Thread {
     // Fetches data from url passed
     private void downloadRouteData(String url) {
 
-//        System.out.println("Download route function started");
+        // System.out.println("Download route function started");
         Log.d("DOWNLOAD_ROUTE", "Downloading route from Google...");
 
-        // For storing data from web service
+        // For storing data from web service.
         String data = "";
 
-        try{
-            // Fetching the data from web service
+        try {
+            // Fetching the data from web service.
             data = downloadUrl(url);
-        } catch(Exception e){
-            Log.d("Background Task",e.toString());
+        } catch (Exception e) {
+            Log.d("Background Task", e.toString());
         }
 
         jsonRoute = data;
 
-        // replace whitespaces to minimize String length
+        // Replace whitespaces to minimize String length.
         jsonRoute = jsonRoute.replaceAll("\\s+", "");
 
         Log.d("jsonRoute", jsonRoute);
 
-        //create file with route info
+        // Create file with route info.
         saveToFile(routeFilename + ".json", jsonRoute);
 
     }

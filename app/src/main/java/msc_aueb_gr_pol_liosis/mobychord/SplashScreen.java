@@ -8,21 +8,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashScreen extends AppCompatActivity {
 
-    private static final long SPLASH_DISPLAY_LENGTH = 5000 ;
+    private static final long SPLASH_DISPLAY_DELAY_MILLIS = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        new Handler().postDelayed(new Runnable(){
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent mainIntent = new Intent(SplashScreen.this,ChooseMode.class);
+                Intent mainIntent = new Intent(SplashScreen.this, ChooseMode.class);
                 SplashScreen.this.startActivity(mainIntent);
                 SplashScreen.this.finish();
             }
-        }, SPLASH_DISPLAY_LENGTH);
+        }, SPLASH_DISPLAY_DELAY_MILLIS);
 
     }
 

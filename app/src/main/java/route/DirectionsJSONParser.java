@@ -11,16 +11,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DirectionsJSONParser {
 
     private JSONArray jRoutes = null;
-    List<List<HashMap<String, String>>> routes = null;
+    List<List<Map<String, String>>> routes = null;
 
-    /** Receives a JSONObject and returns a list of lists containing latitude and longitude */
-    public List<List<HashMap<String,String>>> parse(JSONObject jObject){
+    /**
+     * Receives a JSONObject and returns a list of lists containing latitude and longitude
+     */
+    public List<List<Map<String, String>>> parse(JSONObject jObject) {
 
-        routes = new ArrayList<List<HashMap<String,String>>>() ;
+        routes = new ArrayList<>();
         JSONArray jLegs;
         JSONArray jSteps;
 
@@ -28,49 +31,49 @@ public class DirectionsJSONParser {
 
             jRoutes = jObject.getJSONArray("routes");
             Log.d("JSON", jRoutes.get(0).toString());
-//            Log.d("JSON", jRoutes.toString());
+            // Log.d("JSON", jRoutes.toString());
 
             /** Traversing all routes */
-            for(int i=0;i<jRoutes.length();i++){
-                jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs");
-                List path = new ArrayList<HashMap<String, String>>();
+            for (int i = 0; i < jRoutes.length(); i++) {
+                jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
+                List<Map<String, String>> path = new ArrayList<>();
 
                 /** Traversing all legs */
-                for(int j=0;j<jLegs.length();j++){
-                    jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
+                for (int j = 0; j < jLegs.length(); j++) {
+                    jSteps = ((JSONObject) jLegs.get(j)).getJSONArray("steps");
 
                     /** Traversing all steps */
-                    for(int k=0;k<jSteps.length();k++){
+                    for (int k = 0; k < jSteps.length(); k++) {
                         String polyline = "";
-                        polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
+                        polyline = (String) ((JSONObject) ((JSONObject) jSteps.get(k)).get("polyline")).get("points");
                         List<LatLng> list = decodePoly(polyline);
 
                         /** Traversing all points */
-                        for(int l=0;l<list.size();l++){
-                            HashMap<String, String> hm = new HashMap<String, String>();
-                            hm.put("lat", Double.toString(((LatLng)list.get(l)).latitude) );
-                            hm.put("lng", Double.toString(((LatLng)list.get(l)).longitude) );
-                            path.add(hm);
+                        for (int l = 0; l < list.size(); l++) {
+                            Map<String, String> hashMap = new HashMap<>();
+                            hashMap.put("lat", Double.toString(((LatLng) list.get(l)).latitude));
+                            hashMap.put("lng", Double.toString(((LatLng) list.get(l)).longitude));
+                            path.add(hashMap);
                         }
                     }
                     routes.add(path);
                 }
             }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException ex) {
+            ex.printStackTrace();
         }
 
         Log.d("ROUTES SIZE", String.valueOf(routes.size()));
         return routes;
     }
+
     /**
      * Method to decode polyline points
      * Courtesy : http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java
-     * */
+     */
     private List<LatLng> decodePoly(String encoded) {
-
-        List<LatLng> poly = new ArrayList<LatLng>();
+        List<LatLng> poly = new ArrayList<>();
         int index = 0, len = encoded.length();
         int lat = 0, lng = 0;
 
@@ -102,9 +105,10 @@ public class DirectionsJSONParser {
         return poly;
     }
 
-    public List<HashMap<String, String>> getFirstRoute() throws JSONException {
+    public List<Map<String, String>> getFirstRoute() {
         return routes.get(0);
     }
+
     public JSONArray getJRoutes() {
         return jRoutes;
     }
