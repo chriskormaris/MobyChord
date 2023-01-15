@@ -8,7 +8,7 @@
 
 **Video Demos**
 
-[MobyChord Demonstration](https://www.youtube.com/watch?v=JRSBxeAg6Mo&feature=youtu.be)
+[MobyChord Demonstration](https://www.youtube.com/watch?v=JRSBxeAg6Mo)
 
 [MobyChord Simulation (Nodes: 6, 7, 0)](https://www.youtube.com/watch?v=6_RVweUqYbw)
 
