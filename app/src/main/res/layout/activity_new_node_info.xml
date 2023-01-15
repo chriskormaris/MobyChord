@@ -53,16 +53,16 @@
         android:hint="0.0.0.0" />
 
     <TextView
-        android:text="Pred ID: "
+        android:text="Predecessor ID: "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView3"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:layout_alignBaseline="@+id/predID"
-        android:layout_alignBottom="@+id/predID" />
+        android:layout_alignBaseline="@+id/predecessorID"
+        android:layout_alignBottom="@+id/predecessorID" />
 
     <EditText
-        android:id="@+id/predID"
+        android:id="@+id/predecessorID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
@@ -74,60 +74,60 @@
         android:hint="0" />
 
     <TextView
-        android:text="Pred IP:"
+        android:text="Predecessor IP:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView4"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:layout_alignBaseline="@+id/predIP"
-        android:layout_alignBottom="@+id/predIP"
+        android:layout_alignBaseline="@+id/predecessorIP"
+        android:layout_alignBottom="@+id/predecessorIP"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:text="Succ ID:"
+        android:text="Successor ID:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView5"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:layout_alignBaseline="@+id/succID"
-        android:layout_alignBottom="@+id/succID"
+        android:layout_alignBaseline="@+id/successorID"
+        android:layout_alignBottom="@+id/successorID"
         android:layout_alignRight="@+id/textView"
         android:layout_alignEnd="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/succID"
+        android:id="@+id/successorID"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:layout_below="@+id/predIP"
-        android:layout_alignLeft="@+id/predIP"
-        android:layout_alignStart="@+id/predIP"
+        android:layout_below="@+id/predecessorIP"
+        android:layout_alignLeft="@+id/predecessorIP"
+        android:layout_alignStart="@+id/predecessorIP"
         android:hint="0" />
 
     <TextView
-        android:text="Succ IP:"
+        android:text="Successor IP:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView6"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:layout_alignBaseline="@+id/succIP"
-        android:layout_alignBottom="@+id/succIP"
+        android:layout_alignBaseline="@+id/successorIP"
+        android:layout_alignBottom="@+id/successorIP"
         android:layout_alignRight="@+id/textView5"
         android:layout_alignEnd="@+id/textView5"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/succIP"
+        android:id="@+id/successorIP"
         android:layout_width="165dp"
         android:layout_height="wrap_content"
         android:inputType="phone"
-        android:layout_below="@+id/succID"
-        android:layout_alignLeft="@+id/succID"
-        android:layout_alignStart="@+id/succID"
+        android:layout_below="@+id/successorID"
+        android:layout_alignLeft="@+id/successorID"
+        android:layout_alignStart="@+id/successorID"
         android:hint="0.0.0.0" />
 
     <Button
@@ -139,13 +139,13 @@
         android:layout_centerHorizontal="true" />
 
     <EditText
-        android:id="@+id/predIP"
+        android:id="@+id/predecessorIP"
         android:layout_width="165dp"
         android:layout_height="wrap_content"
         android:inputType="phone"
         android:hint="0.0.0.0"
-        android:layout_below="@+id/predID"
-        android:layout_alignLeft="@+id/predID"
-        android:layout_alignStart="@+id/predID" />
+        android:layout_below="@+id/predecessorID"
+        android:layout_alignLeft="@+id/predecessorID"
+        android:layout_alignStart="@+id/predecessorID" />
 
 </RelativeLayout>

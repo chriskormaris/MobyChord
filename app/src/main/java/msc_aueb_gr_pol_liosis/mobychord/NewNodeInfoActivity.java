@@ -89,7 +89,7 @@ public class NewNodeInfoActivity extends AppCompatActivity {
 
         // Create file with the new Node's Info.
         try {
-            fos = new DataOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory() 
+            fos = new DataOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory()
                     + "/mobyChord/Node/Net Architecture/myInfo.txt"));
             fos.writeBytes(myID + ":" + ipAddress);
         } catch (IOException e) {
@@ -98,8 +98,8 @@ public class NewNodeInfoActivity extends AppCompatActivity {
 
         // Create file with predecessor's info.
         try {
-            fos = new DataOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory() 
-                    + "/mobyChord/Node/Net Architecture/predInfo.txt"));
+            fos = new DataOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory()
+                    + "/mobyChord/Node/Net Architecture/predecessorInfo.txt"));
 
             if (predecessorID.getText().toString().equals("") && predecessorIP.getText().toString().equals("")) {
                 fos.writeBytes(myID + ":" + ipAddress);
@@ -113,8 +113,8 @@ public class NewNodeInfoActivity extends AppCompatActivity {
 
         // Create file with successor's info.
         try {
-            fos = new DataOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory() 
-                    + "/mobyChord/Node/Net Architecture/succInfo.txt"));
+            fos = new DataOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory()
+                    + "/mobyChord/Node/Net Architecture/successorInfo.txt"));
 
             if (successorID.getText().toString().equals("") && successorIP.getText().toString().equals("")) {
                 fos.writeBytes(myID + ":" + ipAddress);
@@ -140,10 +140,10 @@ public class NewNodeInfoActivity extends AppCompatActivity {
     private void readInput() {
         nodeID = (EditText) this.findViewById(R.id.nodeID);
         nodeIP = (EditText) this.findViewById(R.id.nodeIP);
-        predecessorID = (EditText) this.findViewById(R.id.predID);
-        predecessorIP = (EditText) this.findViewById(R.id.predIP);
-        successorID = (EditText) this.findViewById(R.id.succID);
-        successorIP = (EditText) this.findViewById(R.id.succIP);
+        predecessorID = (EditText) this.findViewById(R.id.predecessorID);
+        predecessorIP = (EditText) this.findViewById(R.id.predecessorIP);
+        successorID = (EditText) this.findViewById(R.id.successorID);
+        successorIP = (EditText) this.findViewById(R.id.successorIP);
 
         myID = nodeID.getText().toString();
         ipAddress = nodeIP.getText().toString();

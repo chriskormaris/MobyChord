@@ -46,7 +46,7 @@ public class Hashing {
 				+ "\"duration\":{\"text\":\"16 mins\",\"value\":931},"
 				+ "\"end_address\":\"28is Oktovriou 78, Athina 104 34, Greece\","
 				+ "\"end_location\":{\"lat\":37.9941503,\"lng\":23.7319537},"
-				+ "\"start_address\":\"Leof. Stratarchou Alexandrou Papagou 93, Zografou 157 73, Greece\","
+				+ "\"start_address\":\"Leof. Stratarchou Alexandrou Papagou 93, Zografos 157 73, Greece\","
 				+ "\"start_location\":{\"lat\":37.97779010000001,\"lng\":23.7704548"
 				+ "},"
 				+ "\"steps\":"
@@ -120,7 +120,7 @@ public class Hashing {
 		*/
 
         String liosiaPostalCode = "13341"; // zip code for Liosa
-        String zografouPostalCode = "15772"; // zip code for Zografou
+        String ZografosPostalCode = "15772"; // zip code for Zografos
         String thessalonikiPostalCode = "54351"; // zip code for Thessaloniki
         String auebPostalCode = "10434"; // zip code for AUEB
 
@@ -129,9 +129,9 @@ public class Hashing {
         System.out.println("AUEB to Liosia id: " + LiosiaToAuebId);
         System.out.println();
 
-        String fromZografouToAueb = auebPostalCode + "_" + zografouPostalCode;
-        int ZografouToAuebId = Hash(fromZografouToAueb, 8);
-        System.out.println("Zografou to AUEB id: " + ZografouToAuebId);
+        String fromZografosToAueb = auebPostalCode + "_" + ZografosPostalCode;
+        int ZografosToAuebId = Hash(fromZografosToAueb, 8);
+        System.out.println("Zografos to AUEB id: " + ZografosToAuebId);
         System.out.println();
 
         String fromThessalonikiToAUEB = auebPostalCode + "_" + thessalonikiPostalCode;

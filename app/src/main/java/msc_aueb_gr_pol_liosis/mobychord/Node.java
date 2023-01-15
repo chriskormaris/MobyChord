@@ -1,12 +1,13 @@
 package msc_aueb_gr_pol_liosis.mobychord;
 
+import static msc_aueb_gr_pol_liosis.mobychord.ChordSize.M;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,8 +36,12 @@ import threads.OfferServiceToConnectedUser;
 
 public class Node extends AppCompatActivity {
 
-    private final int m = ChordSize.M;
-
+    //**********Memory variables**********
+    public static Memcached memcached;
+    public static Set<Integer> keys = new TreeSet<>();
+    public static Vector<String> filenameVector = new Vector<>();  // contains Memcached filenames
+    public static Vector<String> fileContentVector = new Vector<>();  // contains Memcached filecontents
+    int[][] fingerTable = new int[M][2];
     //**********GUI Variables**********
     private Button disconnectButton;
     private Button crdButton;
@@ -48,43 +53,31 @@ public class Node extends AppCompatActivity {
     private TextView myIdTV;
     private TextView myIpTV;
     private EditText logArea;
-
     //**********Networking Variables**********
-    private String myID;
-    private String myIP;
-    private String succID;
-    private String succIP;
-    private String predID;
-    private String predIP;
+    private String myID = "0";
+    private String myIP = "0.0.0.0";
+    private String successorID = "0";
+    private String successorIP = "0.0.0.0";
+    private String predecessorID = "0";
+    // String[] chordNodes = new String[(int) Math.pow(2, M)];
+    private String predecessorIP = "0.0.0.0";
     private String info;
-
-    //**********Memory variables**********
-    public static Memcached memcached;
-    public static Set<Integer> keys = new TreeSet<Integer>();
-    int [][] ftable = new int [m][2];
-    String [] chordNodes = new String[(int) Math.pow(2, m)];
-
-    public static Vector<String> filenameVector = new Vector<>(); // contains Memcached filenames
-    public static Vector<String> filecontentVector = new Vector<>(); // contains Memcached filecontents
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_node);
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         disconnectButton = (Button) this.findViewById(R.id.disconnectButton);
         // ipButton = (Button) this.findViewById(R.id.ipButton);
         crdButton = (Button) this.findViewById(R.id.crdButton);
         fingerTableButton = (Button) this.findViewById(R.id.fingertableButton);
         keysButton = (Button) this.findViewById(R.id.keysButton);
-        myIdTV =  (TextView) this.findViewById(R.id.myIdTV);
-        myIpTV =  (TextView) this.findViewById(R.id.myIpTV);
+        myIdTV = (TextView) this.findViewById(R.id.myIdTV);
+        myIpTV = (TextView) this.findViewById(R.id.myIpTV);
         logArea = (EditText) this.findViewById(R.id.logArea);
         filesButton = (Button) this.findViewById(R.id.filesButton);
         cacheButton = (Button) this.findViewById(R.id.cacheButton);
@@ -92,124 +85,84 @@ public class Node extends AppCompatActivity {
         logArea.setKeyListener(null); // disable user input
         // logArea.setEnabled(false); // make it not clickable
 
-        keysButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick (View v) {
-
-                logArea.setText("");
-                for(int i = 0; i < keys.size(); i++) {
-                    Log.d("Node", " key " + keys.toArray()[i]);
-                    logArea.append("key " + keys.toArray()[i]);
-                    logArea.append("\n");
-                }
-
-
+        keysButton.setOnClickListener(v -> {
+            logArea.setText("");
+            for (int i = 0; i < keys.size(); i++) {
+                Log.d("Node", " key " + keys.toArray()[i]);
+                logArea.append("key " + keys.toArray()[i]);
+                logArea.append("\n");
             }
         });
 
         //Get data of Node's finbgertable
-        fingerTableButton.setOnClickListener(new View.OnClickListener() {
+        fingerTableButton.setOnClickListener(v -> {
+            // Print fingerTable in logs
+            memcached.printFingerTable();
 
-            @Override
-            public void onClick (View v) {
-                //Print fingerTable in logs
-                memcached.printFingerTable();
-
-                //Print fingertable inside LogArea
-                ftable = memcached.getFingerTable();
-                logArea.setText("");
-                for(int i = 0 ; i < m ; i++) {
-                    for(int j = 0; j < m-1; j++) {
-                        logArea.append(" i = "+ i + " j = " +j + ": " + ftable[i][j]);
-                        logArea.append("\n");
-                    }
-                }
-            }
-        });
-
-        crdButton.setOnClickListener(new View.OnClickListener()
-        {
-
-            @Override
-            public void onClick (View v)
-            {
-                Log.d("Node", "Node id: " + memcached.getNodeID());
-                Log.d("Node", "Node ip: " + memcached.getNodeIP());
-                Log.d("Node","Pred id: " + memcached.getPredID());
-                Log.d("Node","Pred ip: " + memcached.getPredIP());
-                Log.d("Node","Succ id: " + memcached.getSuccID());
-                Log.d("Node","Succ ip: " + memcached.getSuccIP());
-
-                logArea.setText("");
-
-                logArea.append("Node id: " + memcached.getNodeID()); logArea.append("\n");
-                logArea.append("Node ip: " + memcached.getNodeIP()); logArea.append("\n");
-                logArea.append("Pred id: " + memcached.getPredID()); logArea.append("\n");
-                logArea.append("Pred ip: " + memcached.getPredIP()); logArea.append("\n");
-                logArea.append("Succ id: " + memcached.getSuccID()); logArea.append("\n");
-                logArea.append("Succ ip: " + memcached.getSuccIP()); logArea.append("\n");
-            }
-        });
-
-        filesButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick (View v) {
-                logArea.setText("");
-
-                printKeyFiles(logArea);
-            }
-
-        });
-
-        /*
-        ipButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick (View v) {
-
-                memcached.printRingData();
-
-                chordNodes = memcached.getRingData();
-                logArea.setText("");
-                for(int i = 0; i < chordNodes.length; i++) {
-                    logArea.append("Node" + i + ": " + chordNodes[i]);
+            // Print fingerTable inside LogArea
+            fingerTable = memcached.getFingerTable();
+            logArea.setText("");
+            for (int i = 0; i < M; i++) {
+                for (int j = 0; j < M - 1; j++) {
+                    logArea.append(" i = " + i + " j = " + j + ": " + fingerTable[i][j]);
                     logArea.append("\n");
                 }
             }
         });
-        */
 
-        cacheButton.setOnClickListener(new View.OnClickListener() {
+        crdButton.setOnClickListener(v -> {
+            Log.d("Node", "Node id: " + memcached.getNodeID());
+            Log.d("Node", "Node ip: " + memcached.getNodeIP());
+            Log.d("Node", "Predecessor id: " + memcached.getPredecessorID());
+            Log.d("Node", "Predecessor ip: " + memcached.getPredecessorIP());
+            Log.d("Node", "Successor id: " + memcached.getSuccessorID());
+            Log.d("Node", "Successor ip: " + memcached.getSuccessorIP());
 
-            @Override
-            public void onClick (View v) {
-                logArea.setText("");
+            logArea.setText("");
 
-                printMemcachedFiles(logArea);
-            }
-
+            logArea.append("Node id: " + memcached.getNodeID());
+            logArea.append("\n");
+            logArea.append("Node ip: " + memcached.getNodeIP());
+            logArea.append("\n");
+            logArea.append("Predecessor id: " + memcached.getPredecessorID());
+            logArea.append("\n");
+            logArea.append("Predecessor ip: " + memcached.getPredecessorIP());
+            logArea.append("\n");
+            logArea.append("Successor id: " + memcached.getSuccessorID());
+            logArea.append("\n");
+            logArea.append("Successor ip: " + memcached.getSuccessorIP());
+            logArea.append("\n");
         });
 
+        filesButton.setOnClickListener(v -> {
+            logArea.setText("");
+            printKeyFiles(logArea);
+        });
 
-        disconnectButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick (View v) {
-                Toast.makeText(Node.this,"Informing successor Node... ",Toast.LENGTH_SHORT).show();
-
-                leaveChordRing();
-
-                Toast.makeText(Node.this, "Device left ring!" , Toast.LENGTH_SHORT).show();
-
-                // clear keys
-                keys.clear();
-
-                goToMainActivity();
-
+        /*
+        ipButton.setOnClickListener((View.OnClickListener) v -> {
+            memcached.printRingData();
+            chordNodes = memcached.getRingData();
+            logArea.setText("");
+            for(int i = 0; i < chordNodes.length; i++) {
+                logArea.append("Node" + i + ": " + chordNodes[i]);
+                logArea.append("\n");
             }
+        });
+        */
 
+        cacheButton.setOnClickListener(v -> {
+            logArea.setText("");
+            printMemcachedFiles(logArea);
+        });
+
+        disconnectButton.setOnClickListener(v -> {
+            Toast.makeText(Node.this, "Informing successor Node... ", Toast.LENGTH_SHORT).show();
+            leaveChordRing();
+            Toast.makeText(Node.this, "Device left ring!", Toast.LENGTH_SHORT).show();
+            // clear keys
+            keys.clear();
+            goToMainActivity();
         });
 
         retrieveNodeCrucialData();
@@ -220,53 +173,52 @@ public class Node extends AppCompatActivity {
         // Save crucial data to device memory
         memcached.setNodeID(this.myID);
         memcached.setNodeIP(this.myIP);
-        memcached.setPredID(this.predID);
-        memcached.setPredIP(this.predIP);
-        memcached.setSuccID(this.succID);
-        memcached.setSuccIP(this.succIP);
+        memcached.setPredecessorID(this.predecessorID);
+        memcached.setPredecessorIP(this.predecessorIP);
+        memcached.setSuccessorID(this.successorID);
+        memcached.setSuccessorIP(this.successorIP);
 
-        // Update crucial info in device memory of pred & succ nodes.
-        memcached.updateNode(Integer.valueOf(myID), myIP);
-        memcached.updateNode(Integer.valueOf(predID), predIP);
-        memcached.updateNode(Integer.valueOf(succID) , succIP);
+        // Update crucial info in device memory of predecessor & successor nodes.
+        memcached.updateNode(Integer.parseInt(myID), myIP);
+        memcached.updateNode(Integer.parseInt(predecessorID), predecessorIP);
+        memcached.updateNode(Integer.parseInt(successorID), successorIP);
 
-        // Compute required node for fingerTbale
+        // Compute required node for fingerTable
         memcached.computeFingerTable();
 
         // Compute the values of required succ nodes
         memcached.computeFingerTableValues();
 
-        // Print starting fingertable
+        // Print starting fingerTable
         memcached.printFingerTable();
 
         // Update Gui Environment
         this.myIdTV.setText("Node: " + this.myID);
-        this.myIpTV.setText("IP: "   +this.myIP);
+        this.myIpTV.setText("IP: " + this.myIP);
 
         Toast.makeText(this, "Connected to Chord as Node: " + this.myID, Toast.LENGTH_SHORT).show();
 
         // If we are the first Node Entering the Chord, we create 8 keys (as Integers) from 0 to 7.
         // This specific functionality has been implemented for testing reasons for later phases of The project
-        if(memcached.getNodeIP().equals(memcached.getPredIP()) && memcached.getNodeIP().equals(memcached.getSuccIP())) {
+        if (memcached.getNodeIP().equals(memcached.getPredecessorIP())
+                && memcached.getNodeIP().equals(memcached.getSuccessorIP())) {
             Log.d("Node", "Creating the keys...");
 
-            for(int i = 0; i < (int) Math.pow(2,m); i++) {
+            for (int i = 0; i < (int) Math.pow(2, M); i++) {
                 keys.add(i);
             }
-
         }
 
-        if (memcached.getPredIP().equals(memcached.getSuccIP()) && memcached.getPredID().equals(memcached.getSuccID())) {
+        if (memcached.getPredecessorIP().equals(memcached.getSuccessorIP())
+                && memcached.getPredecessorID().equals(memcached.getSuccessorID())) {
             informFirstNode();
-        }
-        else {
+        } else {
             informPredecessor();
             informSuccessor();
         }
 
         // Get in multiThreaded mini server mode
         openMiniServer();
-
     }
 
     @Override
@@ -286,9 +238,9 @@ public class Node extends AppCompatActivity {
         File file;
 
         //Retrieve info for the Node
-        file = new File(Environment.getExternalStorageDirectory() , "/mobyChord/Node/Net Architecture/myInfo.txt");
+        file = new File(Environment.getExternalStorageDirectory(), "/mobyChord/Node/Net Architecture/myInfo.txt");
 
-        String retrievedText = "";
+        String retrievedText;
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -306,8 +258,8 @@ public class Node extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //retrieve info for the predecessor
-        file = new File(Environment.getExternalStorageDirectory() , "/mobyChord/Node/Net Architecture/predInfo.txt");
+        // retrieve info for the predecessor
+        file = new File(Environment.getExternalStorageDirectory(), "/mobyChord/Node/Net Architecture/predecessorInfo.txt");
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -318,15 +270,14 @@ public class Node extends AppCompatActivity {
 
             String[] splitted = retrievedText.split(":");
 
-            setPredID(splitted[0]);
-            setPredIP(splitted[1]);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            setPredecessorID(splitted[0]);
+            setPredecessorIP(splitted[1]);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
         //Retrieve info for successor
-        file = new File(Environment.getExternalStorageDirectory() , "/mobyChord/Node/Net Architecture/succInfo.txt");
+        file = new File(Environment.getExternalStorageDirectory(), "/mobyChord/Node/Net Architecture/successorInfo.txt");
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -337,60 +288,52 @@ public class Node extends AppCompatActivity {
 
             String[] splitted = retrievedText.split(":");
 
-            setSuccID(splitted[0]);
-            setSuccIP(splitted[1]);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            setSuccessorID(splitted[0]);
+            setSuccessorIP(splitted[1]);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-
     }
 
 
     private void informFirstNode() {
         Log.d("Node", " Informing the only existing node in Chord");
 
-        //Obviously do not send to myself
-        if (!predIP.equals(this.myIP))
-        {
-        Socket requestSocket = null;
-        ObjectOutputStream out = null;
+        // Obviously do not send to myself
+        if (!predecessorIP.equals(this.myIP)) {
+            Socket requestSocket = null;
+            ObjectOutputStream out;
 
-        this.info = "0" + "#" + this.myID + "#" + this.myIP;
+            this.info = "0" + "#" + this.myID + "#" + this.myIP;
 
-        try {
-
-            requestSocket = new Socket(this.predIP, 3300);
-
-            out = new ObjectOutputStream(requestSocket.getOutputStream());
-
-            out.writeObject(this.info);
-            out.flush();
-
-            Log.d("Node", " Info sent to First Node ------> " + this.info);
-
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        } finally {
             try {
-                if(requestSocket != null) {
-                    requestSocket.close();
+                requestSocket = new Socket(this.predecessorIP, 3300);
+
+                out = new ObjectOutputStream(requestSocket.getOutputStream());
+
+                out.writeObject(this.info);
+                out.flush();
+
+                Log.d("Node", " Info sent to First Node ------> " + this.info);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } finally {
+                try {
+                    if (requestSocket != null) {
+                        requestSocket.close();
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
             }
         }
-
-        }
-
     }
 
 
     private void informPredecessor() {
 
         // Obviously do not send to myself
-        if (!predIP.equals(this.myIP)) {
+        if (!predecessorIP.equals(this.myIP)) {
             Log.d("Node", "Informing Predecessor... ");
 
             // Inform predecessor Node to change his successor --------------->  passing data:  info = "2#myID#myIP
@@ -401,9 +344,8 @@ public class Node extends AppCompatActivity {
             this.info = "2" + "#" + this.myID + "#" + this.myIP;
 
             try {
-
-                Log.d("Node", this.succIP + " #### " + Integer.valueOf(this.succID));
-                requestSocket = new Socket(this.predIP, 3300);
+                Log.d("Node", this.successorIP + " #### " + Integer.valueOf(this.successorID));
+                requestSocket = new Socket(this.predecessorIP, 3300);
                 Log.d("Node", "socket filled");
 
                 out = new ObjectOutputStream(requestSocket.getOutputStream());
@@ -412,16 +354,15 @@ public class Node extends AppCompatActivity {
                 out.flush();
 
                 Log.d("Node", " Info sent to pred ------> " + this.info);
-
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             } finally {
                 try {
-                    if(requestSocket != null) {
+                    if (requestSocket != null) {
                         requestSocket.close();
                     }
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
 
@@ -429,10 +370,9 @@ public class Node extends AppCompatActivity {
     }
 
     private void informSuccessor() {
-
         //Obviously do not send to myself
-        if (!succIP.equals(this.myIP)) {
-            //inform successor Node to change his predecessor --------------->  passing data:  info = "1#myID#myIP
+        if (!successorIP.equals(this.myIP)) {
+            // inform successor Node to change his predecessor --------------->  passing data:  info = "1#myID#myIP
 
             Log.d("Node", "Informing successor... ");
 
@@ -442,24 +382,22 @@ public class Node extends AppCompatActivity {
             this.info = "1" + "#" + this.myID + "#" + this.myIP;
 
             try {
-
-                requestSocket = new Socket(this.succIP, 3300);
+                requestSocket = new Socket(this.successorIP, 3300);
                 out = new ObjectOutputStream(requestSocket.getOutputStream());
 
                 out.writeObject(this.info);
                 out.flush();
 
                 Log.d("Node", " Info sent to succ ------> " + this.info);
-
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             } finally {
                 try {
                     if (requestSocket != null) {
                         requestSocket.close();
                     }
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
         }
@@ -483,9 +421,11 @@ public class Node extends AppCompatActivity {
 
         File folder = new File(pathToKeys);
 
-        for (final File fileEntry : folder.listFiles()) {
-            if (!fileEntry.isDirectory()) {
-                filenames.add(fileEntry.getName());
+        if (folder.listFiles() != null) {
+            for (final File fileEntry : folder.listFiles()) {
+                if (!fileEntry.isDirectory()) {
+                    filenames.add(fileEntry.getName());
+                }
             }
         }
 
@@ -500,7 +440,6 @@ public class Node extends AppCompatActivity {
             File file = new File(pathToKeys + "/" + filename);
             file.delete();
         }
-
     }
 
     private void printKeyFiles(EditText text) {
@@ -509,11 +448,13 @@ public class Node extends AppCompatActivity {
 
         File folder = new File(pathToKeys);
 
-        for (File file : folder.listFiles()) {
-            if (!file.isDirectory()) {
-                Log.d("KEY_FILE", file.getName());
-                text.append(file.getName());
-                text.append("\n");
+        if (folder.listFiles() != null) {
+            for (File file : folder.listFiles()) {
+                if (!file.isDirectory()) {
+                    Log.d("KEY_FILE", file.getName());
+                    text.append(file.getName());
+                    text.append("\n");
+                }
             }
         }
     }
@@ -533,24 +474,25 @@ public class Node extends AppCompatActivity {
 
         File file = new File(pathToKeys);
 
-        String retrievedText = "";
+        StringBuilder retrievedText = new StringBuilder();
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
 
-            String line = "";
+            String line;
             while ((line = br.readLine()) != null) {
-                retrievedText = retrievedText + line;
+                retrievedText.append(line);
             }
             br.close();
 
         } catch (FileNotFoundException e) {
-            Log.e("KEY_FILE_NOT_FOUND", "Key file with this name does not exist!");            retrievedText = "";
+            Log.e("KEY_FILE_NOT_FOUND", "Key file with this name does not exist!");
+            retrievedText = new StringBuilder();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return retrievedText;
+        return retrievedText.toString();
     }
 
     private void sendKeysToSuccessor() {
@@ -561,21 +503,21 @@ public class Node extends AppCompatActivity {
 
         Vector<String> filenames = readKeyFilenamesIntoVector();
 
-        String successor_node_id = memcached.getSuccID();
-        String successor_node_ip = memcached.getSuccIP();
+        String successor_node_id = memcached.getSuccessorID();
+        String successor_node_ip = memcached.getSuccessorIP();
         String retrieved_key;
 
-        if(!(successor_node_id.equals(memcached.getNodeID()) && successor_node_ip.equals(this.memcached.getNodeIP()))) {
-            for(int i = 0; i < Node.keys.size(); i++) {
+        if (!(successor_node_id.equals(memcached.getNodeID()) && successor_node_ip.equals(memcached.getNodeIP()))) {
+            for (int i = 0; i < Node.keys.size(); i++) {
 
                 int key_id = (int) Node.keys.toArray()[i];
 
                 retrieved_key = String.valueOf(keys.toArray()[i]);
                 this.info = "5" + "#" + retrieved_key;
 
-                Vector<String> filenames_to_send = new Vector<String>();
-                Vector<String> filecontent_to_send = new Vector<String>();
-                for(String filename: filenames) {
+                Vector<String> filenames_to_send = new Vector<>();
+                Vector<String> filecontent_to_send = new Vector<>();
+                for (String filename : filenames) {
                     if (filename.startsWith(String.valueOf(key_id))) {
                         filenames_to_send.add(filename);
                         filecontent_to_send.add(getKeyFileContentByFileName(filename));
@@ -591,9 +533,9 @@ public class Node extends AppCompatActivity {
                     out.flush();
                     requestSocket.close();
 
-                    Log.d("Node","Sending retrieved Key to successor -----> " + this.info);
+                    Log.d("Node", "Sending retrieved Key to successor -----> " + this.info);
 
-                    for (String filename: filenames_to_send) {
+                    for (String filename : filenames_to_send) {
                         requestSocket = new Socket(successor_node_ip, 3300);
                         out = new ObjectOutputStream(requestSocket.getOutputStream());
                         out.writeObject("400#" + filename);
@@ -603,7 +545,7 @@ public class Node extends AppCompatActivity {
                         Log.d("Node", "Sending filename to successor -----> " + filename);
                     }
 
-                    for (String filecontent: filecontent_to_send) {
+                    for (String filecontent : filecontent_to_send) {
                         requestSocket = new Socket(successor_node_ip, 3300);
                         out = new ObjectOutputStream(requestSocket.getOutputStream());
                         out.writeObject("401#" + filecontent);
@@ -631,9 +573,11 @@ public class Node extends AppCompatActivity {
                 e.printStackTrace();
             } finally {
                 try {
-                    requestSocket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    if (requestSocket != null) {
+                        requestSocket.close();
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
         }
@@ -641,20 +585,19 @@ public class Node extends AppCompatActivity {
     }
 
     private void informSuccessorForLeavingRing() {
-
-        //Obviously do not send to myself
-        if (!succIP.equals(this.myIP)) {
+        // Obviously do not send to myself
+        if (!successorIP.equals(this.myIP)) {
             Log.d("Node", "Informing successor for leaving ring... ");
 
             Socket requestSocket = null;
             ObjectOutputStream out;
 
-            //I pass to my successor the info of my predecessor
-            this.info = "6" + "#" + memcached.getPredID() + "#" + memcached.getPredIP();
+            // I pass to my successor the info of my predecessor
+            this.info = "6" + "#" + memcached.getPredecessorID() + "#" + memcached.getPredecessorIP();
 
             try {
 
-                requestSocket = new Socket(this.succIP, 3300);
+                requestSocket = new Socket(this.successorIP, 3300);
                 out = new ObjectOutputStream(requestSocket.getOutputStream());
 
                 out.writeObject(this.info);
@@ -662,36 +605,35 @@ public class Node extends AppCompatActivity {
 
                 Log.d("Node", "Info sent to succ ------> " + this.info);
 
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             } finally {
                 try {
                     if (requestSocket != null) {
                         requestSocket.close();
                     }
 
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
         }
     }
 
     private void informPredecessorForLeavingRing() {
-
-        //Obviously do not send to myself
-        if (!predIP.equals(this.myIP)) {
-            Log.d("Node", "Informing predecessor for leaving ring... ");
+        // Obviously do not send to myself
+        if (!predecessorIP.equals(this.myIP)) {
+            Log.d("Node", "Informing predecessor for leaving ring...");
 
             Socket requestSocket = null;
             ObjectOutputStream out;
 
             //I pass to my predecessor the info of my successor
-            this.info = "7" + "#" + memcached.getSuccID() + "#" + memcached.getSuccIP();
+            this.info = "7" + "#" + memcached.getSuccessorID() + "#" + memcached.getSuccessorIP();
 
             try {
 
-                requestSocket = new Socket(this.predIP, 3300);
+                requestSocket = new Socket(this.predecessorIP, 3300);
                 out = new ObjectOutputStream(requestSocket.getOutputStream());
 
                 out.writeObject(this.info);
@@ -699,116 +641,123 @@ public class Node extends AppCompatActivity {
 
                 Log.d("Node", " Info sent to succ ------> " + this.info);
 
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             } finally {
                 try {
                     if (requestSocket != null) {
                         requestSocket.close();
                     }
 
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
         }
     }
 
     private void openMiniServer() {
-
         Thread socketServerThread = new Thread(new SocketServerThread());
         socketServerThread.start();
-
     }
 
     public String getMyIP() {
         return this.myIP;
-    }
-    public String getMyID() {
-        return this.myID;
-    }
-    public Context getContext() {
-        return this;
-    }
-
-    private class SocketServerThread extends Thread {
-
-        ServerSocket miniServerSocket = null;
-        final int miniServerPort = 3300;
-
-        @Override
-        public void run() {
-            try {
-                miniServerSocket = new ServerSocket(miniServerPort);
-                Node.this.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run()
-                    {
-                        Log.d("Node", "MiniServer is listening to port: " + miniServerPort + " and IP:" + getMyIP());
-                        Toast.makeText(getContext(), "MiniServer Mode: On", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                while (true) {
-
-                    Socket connection = miniServerSocket.accept();
-
-                    //retrieveNodeCrucialData();
-
-                    //Thread t = new OfferServiceToConnectedUser(getContext(), connection, myID , myIP , predID, predIP, succID , succIP);
-
-                    Thread t = new OfferServiceToConnectedUser(getContext(), connection);
-                    t.start();
-
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (miniServerSocket != null) {
-                        miniServerSocket.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
-
-    public void setMyID(String id) {
-        this.myID = id;
     }
 
     public void setMyIP(String ip) {
         this.myIP = ip;
     }
 
-    public void setSuccID(String id) {
-        this.succID = id;
+    public String getMyID() {
+        return this.myID;
     }
 
-    public void setSuccIP(String ip) {
-        this.succIP = ip;
+    public void setMyID(String id) {
+        this.myID = id;
     }
 
-    public void setPredID(String id) {
-        this.predID = id;
+    public Context getContext() {
+        return this;
     }
 
-    public void setPredIP(String ip) {
-        this.predIP = ip;
+    public void setSuccessorID(String id) {
+        this.successorID = id;
+    }
+
+    public void setSuccessorIP(String ip) {
+        this.successorIP = ip;
+    }
+
+    public void setPredecessorID(String id) {
+        this.predecessorID = id;
+    }
+
+    public void setPredecessorIP(String ip) {
+        this.predecessorIP = ip;
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
-        Toast.makeText(Node.this, "Node is still connected to ring. Server is still running!" , Toast.LENGTH_SHORT).show();
+        Toast.makeText(
+                Node.this,
+                "Node is still connected to ring. Server is still running!",
+                Toast.LENGTH_SHORT
+        ).show();
 
         // go back to main activity, while still running the server
         goToMainActivity();
+    }
+
+    private class SocketServerThread extends Thread {
+        final int miniServerPort = 3300;
+        ServerSocket miniServerSocket = null;
+
+        @Override
+        public void run() {
+            try {
+                miniServerSocket = new ServerSocket(miniServerPort);
+                Node.this.runOnUiThread(() -> {
+                    Log.d("Node", "MiniServer is listening to port: " + miniServerPort + " and IP:" + getMyIP());
+                    Toast.makeText(getContext(), "MiniServer Mode: On", Toast.LENGTH_SHORT).show();
+                });
+
+                while (true) {
+                    Socket connection = miniServerSocket.accept();
+
+                    // retrieveNodeCrucialData();
+
+                    /*
+                    Thread t = new OfferServiceToConnectedUser(
+                            getContext(),
+                            connection,
+                            myID,
+                            myIP,
+                            predecessorID,
+                            predecessorIP,
+                            successorID,
+                            successorIP
+                    );
+                    */
+
+                    Thread t = new OfferServiceToConnectedUser(getContext(), connection);
+                    t.start();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } finally {
+                try {
+                    if (miniServerSocket != null) {
+                        miniServerSocket.close();
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
     }
 
 }

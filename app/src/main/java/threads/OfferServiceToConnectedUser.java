@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Objects;
 import java.util.Vector;
 
 import msc_aueb_gr_pol_liosis.mobychord.DBManager;
@@ -33,8 +32,8 @@ public class OfferServiceToConnectedUser extends Thread {
     //    private ObjectOutputStream outputStream;
     private String myID;
     private String myIP;
-    private String predID;
-    private String predIP;
+    private String predecessorID;
+    private String predecessorIP;
     private String successorID;
     private String successorIP;
 
@@ -55,10 +54,10 @@ public class OfferServiceToConnectedUser extends Thread {
 
             this.myID = Node.memcached.getNodeID();
             this.myIP = Node.memcached.getNodeIP();
-            this.predID = Node.memcached.getPredID();
-            this.predIP = Node.memcached.getPredIP();
-            this.successorID = Node.memcached.getSuccID();
-            this.successorIP = Node.memcached.getSuccIP();
+            this.predecessorID = Node.memcached.getPredecessorID();
+            this.predecessorIP = Node.memcached.getPredecessorIP();
+            this.successorID = Node.memcached.getSuccessorID();
+            this.successorIP = Node.memcached.getSuccessorIP();
 
             db_helper = new DBManager(this.context);
 
@@ -162,8 +161,8 @@ public class OfferServiceToConnectedUser extends Thread {
                 Log.d("OfferServiceToUser", "New key received :" + new_key);
             }
             if (split_data[0].equals("6")) {
-                String leaving_node_ip = Node.memcached.getPredIP();
-                String leaving_node_id = Node.memcached.getPredID();
+                String leaving_node_ip = Node.memcached.getPredecessorIP();
+                String leaving_node_id = Node.memcached.getPredecessorID();
                 Node.memcached.updateNode(Integer.parseInt(leaving_node_id), "0.0.0.0");
 
                 updatePredecessor(split_data);
@@ -173,7 +172,7 @@ public class OfferServiceToConnectedUser extends Thread {
             }
             if (split_data[0].equals("7")) {
                 // String leaving_node_ip = Node.memcached.getSuccIP();
-                String leaving_node_id = Node.memcached.getSuccID();
+                String leaving_node_id = Node.memcached.getSuccessorID();
                 Node.memcached.updateNode(Integer.parseInt(leaving_node_id), "0.0.0.0");
 
                 updateSuccessor(split_data);
@@ -232,25 +231,25 @@ public class OfferServiceToConnectedUser extends Thread {
             if (split_data[0].equals("401")) {
                 Log.d("401", "Retrieved filecontent!");
                 String filecontent = split_data[1];
-                Node.filecontentVector.add(filecontent);
+                Node.fileContentVector.add(filecontent);
             }
             if (split_data[0].equals("402")) {
                 Log.d("402", "Retrieved all files and their contents!");
                 for (int i = 0; i < Node.filenameVector.size(); i++) {
                     String filename = Node.filenameVector.get(i);
-                    String filecontent = Node.filecontentVector.get(i);
+                    String filecontent = Node.fileContentVector.get(i);
 
                     Log.d("name_content", filename + "#" + filecontent);
                 }
 
                 for (int i = 0; i < Node.filenameVector.size(); i++) {
                     String filename = Node.filenameVector.get(i);
-                    String filecontent = Node.filecontentVector.get(i);
+                    String filecontent = Node.fileContentVector.get(i);
 
                     writeContentToKeyFile(filename, filecontent);
                 }
                 Node.filenameVector.clear();
-                Node.filecontentVector.clear();
+                Node.fileContentVector.clear();
             }
 
         } catch (IOException | ClassNotFoundException ex) {
@@ -352,7 +351,8 @@ public class OfferServiceToConnectedUser extends Thread {
         // Update local storage file which is referred to Node's predecessor!!!
         DataOutputStream fos;
         try {
-            fos = new DataOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory() + "/mobyChord/Node/Net Architecture/predInfo.txt"));
+            fos = new DataOutputStream(new FileOutputStream(
+                    Environment.getExternalStorageDirectory() + "/mobyChord/Node/Net Architecture/predecessorInfo.txt"));
             fos.writeBytes(data[1] + ":" + data[2]);
 
             // Update local db
@@ -360,8 +360,8 @@ public class OfferServiceToConnectedUser extends Thread {
 
             // Update memcached
             Node.memcached.updateNode(Integer.parseInt(data[1]), data[2]);
-            Node.memcached.setPredID(data[1]);
-            Node.memcached.setPredIP(data[2]);
+            Node.memcached.setPredecessorID(data[1]);
+            Node.memcached.setPredecessorIP(data[2]);
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -371,7 +371,7 @@ public class OfferServiceToConnectedUser extends Thread {
         DataOutputStream fos2;
         try {
             fos2 = new DataOutputStream(new FileOutputStream(
-                    Environment.getExternalStorageDirectory() + "/mobyChord/Node/Net Architecture/succInfo.txt"));
+                    Environment.getExternalStorageDirectory() + "/mobyChord/Node/Net Architecture/successorInfo.txt"));
             fos2.writeBytes(data[1] + ":" + data[2]);
 
             // Update local db
@@ -379,12 +379,11 @@ public class OfferServiceToConnectedUser extends Thread {
 
             // Update memcached
             Node.memcached.updateNode(Integer.parseInt(data[1]), data[2]);
-            Node.memcached.setSuccID(data[1]);
-            Node.memcached.setSuccIP(data[2]);
+            Node.memcached.setSuccessorID(data[1]);
+            Node.memcached.setSuccessorIP(data[2]);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
     }
 
 
@@ -392,12 +391,12 @@ public class OfferServiceToConnectedUser extends Thread {
         Log.d("OfferServiceToUser", "New Predecessor " + data[1] + " with ip " + data[2]);
 
         // If predecessors is the same, I do nothing (meaning it has already been updated by my predecessor's request)
-        if (!(predID.equals(data[1]) && predIP.equals(data[2]))) {
+        if (!(predecessorID.equals(data[1]) && predecessorIP.equals(data[2]))) {
             //Update local storage file which is referred to Node's predecessor!!!
             DataOutputStream fos;
             try {
                 fos = new DataOutputStream(new FileOutputStream(
-                        Environment.getExternalStorageDirectory() + "/mobyChord/Node/Net Architecture/predInfo.txt"));
+                        Environment.getExternalStorageDirectory() + "/mobyChord/Node/Net Architecture/predecessorInfo.txt"));
                 fos.writeBytes(data[1] + ":" + data[2]);
 
                 //Update local db
@@ -405,8 +404,8 @@ public class OfferServiceToConnectedUser extends Thread {
 
                 //Update memcached
                 Node.memcached.updateNode(Integer.parseInt(data[1]), data[2]);
-                Node.memcached.setPredID(data[1]);
-                Node.memcached.setPredIP(data[2]);
+                Node.memcached.setPredecessorID(data[1]);
+                Node.memcached.setPredecessorIP(data[2]);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -418,21 +417,21 @@ public class OfferServiceToConnectedUser extends Thread {
         Log.d("OfferServiceToUser", "New successor " + data[1] + " with ip " + data[2]);
 
         // If successor is the same, I do nothing (meaning it has already been updated by my successor's request)
-        if (!(successorID.equals(data[1]) && successorID.equals(data[2]))) {
+        if (!(successorID.equals(data[1]) && successorIP.equals(data[2]))) {
             // Update local storage file which is referred to Node's successor!!!
             DataOutputStream fos;
             try {
                 fos = new DataOutputStream(new FileOutputStream(
-                        Environment.getExternalStorageDirectory() + "/mobyChord/Node/Net Architecture/succInfo.txt"));
+                        Environment.getExternalStorageDirectory() + "/mobyChord/Node/Net Architecture/successorInfo.txt"));
                 fos.writeBytes(data[1] + ":" + data[2]);
 
-                //Update local db
+                // Update local db
                 updateDB(data);
 
-                //Update memcached
+                // Update memcached
                 Node.memcached.updateNode(Integer.parseInt(data[1]), data[2]);
-                Node.memcached.setSuccID(data[1]);
-                Node.memcached.setSuccIP(data[2]);
+                Node.memcached.setSuccessorID(data[1]);
+                Node.memcached.setSuccessorIP(data[2]);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -442,10 +441,10 @@ public class OfferServiceToConnectedUser extends Thread {
     private void updateDB(String[] data) {
         // Update the database Chord
         db_helper.updateNode(data[1], data[2]);
-        //  Toast.makeText(this.context, "Node " + data[1] +" connected to ring!!!" , Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this.context, "Node " + data[1] + " connected to ring!!!", Toast.LENGTH_SHORT).show();
     }
 
-    //Inform new inserted Node for my existence in order to update his Data Base and FingerTable
+    // Inform new inserted Node for my existence in order to update his Data Base and FingerTable
     private void informNewNodeForMyState(String[] data) {
         Socket requestSocket = null;
         ObjectOutputStream out;
@@ -467,7 +466,6 @@ public class OfferServiceToConnectedUser extends Thread {
                 if (requestSocket != null) {
                     requestSocket.close();
                 }
-
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -482,8 +480,8 @@ public class OfferServiceToConnectedUser extends Thread {
 
         Vector<String> filenames = readKeyFilenamesIntoVector();
 
-        int pred_node_id = Integer.parseInt(Node.memcached.getPredID());
-        String pred_node_ip = Node.memcached.getPredIP();
+        int pred_node_id = Integer.parseInt(Node.memcached.getPredecessorID());
+        String pred_node_ip = Node.memcached.getPredecessorIP();
         int this_node_id = Integer.parseInt(Node.memcached.getNodeID());
         String retrieved_key;
 
@@ -500,12 +498,12 @@ public class OfferServiceToConnectedUser extends Thread {
                 Node.keys.remove(key_id);
                 i--;
 
-                Vector<String> filenames_to_send = new Vector<String>();
-                Vector<String> filecontent_to_send = new Vector<String>();
+                Vector<String> filenamesToSend = new Vector<>();
+                Vector<String> fileContentToSend = new Vector<>();
                 for (String filename : filenames) {
                     if (filename.startsWith(String.valueOf(key_id))) {
-                        filenames_to_send.add(filename);
-                        filecontent_to_send.add(getKeyFileContentByFileName(filename));
+                        filenamesToSend.add(filename);
+                        fileContentToSend.add(getKeyFileContentByFileName(filename));
                     }
                 }
 
@@ -522,7 +520,7 @@ public class OfferServiceToConnectedUser extends Thread {
 
                     Log.d("OfferServiceToUser", "Sending retrieved Key to new Node -----> " + this.info);
 
-                    for (String filename : filenames_to_send) {
+                    for (String filename : filenamesToSend) {
                         requestSocket = new Socket(pred_node_ip, 3300);
                         out = new ObjectOutputStream(requestSocket.getOutputStream());
                         out.writeObject("400#" + filename);
@@ -532,7 +530,7 @@ public class OfferServiceToConnectedUser extends Thread {
                         Log.d("OfferServiceToUser", "Sending filename to new Node -----> " + filename);
                     }
 
-                    for (String filecontent : filecontent_to_send) {
+                    for (String filecontent : fileContentToSend) {
                         requestSocket = new Socket(pred_node_ip, 3300);
                         out = new ObjectOutputStream(requestSocket.getOutputStream());
                         out.writeObject("401#" + filecontent);
@@ -543,7 +541,7 @@ public class OfferServiceToConnectedUser extends Thread {
                     }
 
                     // delete the files that were sent to the predecessor
-                    deleteKeyFiles(filenames_to_send);
+                    deleteKeyFiles(filenamesToSend);
 
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -579,9 +577,11 @@ public class OfferServiceToConnectedUser extends Thread {
 
         File folder = new File(pathToKeys);
 
-        for (final File fileEntry : Objects.requireNonNull(folder.listFiles())) {
-            if (!fileEntry.isDirectory()) {
-                filenames.add(fileEntry.getName());
+        if (folder.listFiles() != null) {
+            for (final File fileEntry : folder.listFiles()) {
+                if (!fileEntry.isDirectory()) {
+                    filenames.add(fileEntry.getName());
+                }
             }
         }
 

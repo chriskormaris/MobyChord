@@ -24,19 +24,19 @@ import route.DownloadRoute;
  */
 public class LookUp extends Thread {
 
-    private String passInfo;
+    private final String passInfo;
 
     // variables to store what passInfo contains
     private String srcPostalCode;
     private String dstPostalCode;
 
-    private Memcached memcached;
-    private int[][] fingerTable;
-    private int currentNodeID;
-    private String currentNodeIP;
+    private final Memcached memcached;
+    private final int[][] fingerTable;
+    private final int currentNodeID;
+    private final String currentNodeIP;
     private int forwardNodeID;
     private String forwardNodeIP;
-    private Set<Integer> keys;
+    private final Set<Integer> keys;
 
     private String contentToBeHashed;
     private String routeFilename;
@@ -208,13 +208,6 @@ public class LookUp extends Thread {
 
             String line;
 
-            /*
-            while ((line = br.readLine()) != null) {
-                retrievedText = retrievedText + line;
-            }
-            */
-
-            // ALTERNATIVE, more efficient
             StringBuilder stringBuilder = new StringBuilder(retrievedText);
             while ((line = br.readLine()) != null) {
                 stringBuilder.append(line);

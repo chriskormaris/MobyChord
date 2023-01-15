@@ -19,21 +19,20 @@ import java.util.Vector;
 
 public class Memcached {
 
-    //**********Chord Ring variables**********
-    private String nodeID;
-    private String nodeIP;
-    private String predID;
-    private String predIP;
-    private String succID;
-    private String succIP;
-    private final String[] chordNodes = new String[(int) Math.pow(2, M)];
-    private final int[][] fingerTable = new int[M][2];
-
     //**********Memcached parameters**********
     private static final int MEMCACHED_SIZE = 3;
+    private final String[] chordNodes = new String[(int) Math.pow(2, M)];
+    private final int[][] fingerTable = new int[M][2];
     private final Vector<String> cachedFiles = new Vector<>();
     private final Vector<String> cachedInfo = new Vector<>();
     public Map<String, Integer> fileFrequencies = new HashMap<>();
+    //**********Chord Ring variables**********
+    private String nodeID;
+    private String nodeIP;
+    private String predecessorID;
+    private String predecessorIP;
+    private String successorID;
+    private String successorIP;
 
     //**********Constructors**********
     public Memcached() {
@@ -121,10 +120,10 @@ public class Memcached {
     public void computeFingerTableValues() {
         boolean found = false;
 
-        //W e set the node variable to be the ID of current Device as a node in Chord Ring...
+        // We set the node variable to be the ID of current Device as a node in Chord Ring...
         int node = Integer.parseInt(this.nodeID);
 
-        // The 3 interations for the initial column.
+        // The 3 iterations for the initial column.
         // For i = {1, 2, 3} in paper or in our case i = {0, 1, 2}.
         for (int i = 0; i < M; i++) {
 
@@ -173,53 +172,53 @@ public class Memcached {
         }
     }
 
-    //**********Set & Get functions**********
-    public void setNodeID(String id) {
-        this.nodeID = id;
-    }
-
     public String getNodeID() {
         return this.nodeID;
     }
 
-    public void setNodeIP(String ip) {
-        this.nodeIP = ip;
+    //**********Set & Get functions**********
+    public void setNodeID(String id) {
+        this.nodeID = id;
     }
 
     public String getNodeIP() {
         return this.nodeIP;
     }
 
-    public void setPredID(String id) {
-        this.predID = id;
+    public void setNodeIP(String ip) {
+        this.nodeIP = ip;
     }
 
-    public String getPredID() {
-        return this.predID;
+    public String getPredecessorID() {
+        return this.predecessorID;
     }
 
-    public void setPredIP(String ip) {
-        this.predIP = ip;
+    public void setPredecessorID(String id) {
+        this.predecessorID = id;
     }
 
-    public String getPredIP() {
-        return this.predIP;
+    public String getPredecessorIP() {
+        return this.predecessorIP;
     }
 
-    public void setSuccID(String id) {
-        this.succID = id;
+    public void setPredecessorIP(String ip) {
+        this.predecessorIP = ip;
     }
 
-    public String getSuccID() {
-        return this.succID;
+    public String getSuccessorID() {
+        return this.successorID;
     }
 
-    public void setSuccIP(String ip) {
-        this.succIP = ip;
+    public void setSuccessorID(String id) {
+        this.successorID = id;
     }
 
-    public String getSuccIP() {
-        return this.succIP;
+    public String getSuccessorIP() {
+        return this.successorIP;
+    }
+
+    public void setSuccessorIP(String ip) {
+        this.successorIP = ip;
     }
 
     public int[][] getFingerTable() {
