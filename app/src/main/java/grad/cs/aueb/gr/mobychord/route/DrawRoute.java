@@ -40,17 +40,16 @@ import grad.cs.aueb.gr.mobychord.R;
 
 public class DrawRoute extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
     private final MarkerOptions options = new MarkerOptions();
     private final List<LatLng> latlngs = new ArrayList<>();
     private final List<Marker> markers = new ArrayList<>();
-
-    private String srcPostalCode = "";
-    private String dstPostalCode = "";
+    private GoogleMap mMap;
+    private String srcPostalCode;
+    private String dstPostalCode;
     private LatLng srcLocation;
     private LatLng dstLocation;
 
-    private String jsonRoute = "";
+    private String jsonRoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

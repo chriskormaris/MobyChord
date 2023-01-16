@@ -44,19 +44,19 @@ public class RequestClient extends AppCompatActivity {
 
     private ServerSocket miniServerSocket;
 
-    private String srcLocationName = "";
-    private String dstLocationName = "";
-    private String srcPostalCode = "";
-    private String dstPostalCode = "";
+    private String srcLocationName;
+    private String dstLocationName;
+    private String srcPostalCode;
+    private String dstPostalCode;
     private LatLng srcLatLng;
     private LatLng dstLatLng;
 
     private RadioButton buttonGPS;
     private RadioButton buttonManual;
 
-    private String initialAskNodeIP = "";
-    private String passInfo = "";
-    private String clientIpAddress = "";
+    private String initialAskNodeIP;
+    private String passInfo;
+    private String clientIpAddress;
 
     private GPSTracker gps = null;
     private Location gpsLocation = null;
