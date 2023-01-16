@@ -43,7 +43,6 @@ public class ChooseMode extends Activity {
 
     private void newChordNodeRequest() {
         Intent intent = new Intent(this, NewNodeInfoActivity.class);
-        intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
         startActivity(intent);
     }
 
