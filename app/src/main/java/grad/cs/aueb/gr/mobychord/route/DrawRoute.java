@@ -57,7 +57,9 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_route_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
     }
 
     // get location from a given location name
