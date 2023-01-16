@@ -22,32 +22,32 @@ import java.net.URL;
 public class DownloadRoute extends Thread {
 
     private final String routeFilename;
-    private final LatLng srcLocation;
-    private final LatLng dstLocation;
+    private final LatLng sourceLocation;
+    private final LatLng destinationLocation;
 
     private String jsonRoute = "";
 
-    public DownloadRoute(String routeFilename, LatLng srcLocation, LatLng dstLocation) {
+    public DownloadRoute(String routeFilename, LatLng sourceLocation, LatLng destinationLocation) {
         this.routeFilename = routeFilename;
-        this.srcLocation = srcLocation;
-        this.dstLocation = dstLocation;
+        this.sourceLocation = sourceLocation;
+        this.destinationLocation = destinationLocation;
 
-        Log.d("srcLocation latitude", srcLocation.latitude + "");
-        Log.d("srcLocation longitude", srcLocation.longitude + "");
-        Log.d("dstLocation latitude", dstLocation.latitude + "");
-        Log.d("dstLocation longitude", dstLocation.longitude + "");
+        Log.d("srcLocation latitude", sourceLocation.latitude + "");
+        Log.d("srcLocation longitude", sourceLocation.longitude + "");
+        Log.d("dstLocation latitude", destinationLocation.latitude + "");
+        Log.d("dstLocation longitude", destinationLocation.longitude + "");
     }
 
     @Override
     public void run() {
         System.out.println("Inside download route class.");
 
-        Log.d("SRC_LOCATION", srcLocation.toString());
-        Log.d("DST_LOCATION", dstLocation.toString());
+        Log.d("SRC_LOCATION", sourceLocation.toString());
+        Log.d("DST_LOCATION", destinationLocation.toString());
 
         // Getting URL to the Google Directions API
         // This url should be obtained from one of the nodes.
-        String url = getDirectionsUrl(srcLocation, dstLocation);
+        String url = getDirectionsUrl(sourceLocation, destinationLocation);
         Log.d("URL", url);
 
         // Get the route in JSON format and

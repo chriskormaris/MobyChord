@@ -30,11 +30,11 @@ public class OfferServiceToConnectedUser extends Thread {
     private ObjectInputStream inputStream;
 
     //    private ObjectOutputStream outputStream;
-    private String myID;
+    private int myID;
     private String myIP;
-    private String predecessorID;
+    private int predecessorID;
     private String predecessorIP;
-    private String successorID;
+    private int successorID;
     private String successorIP;
 
     private String info;
@@ -161,9 +161,9 @@ public class OfferServiceToConnectedUser extends Thread {
                 Log.d("OfferServiceToUser", "New key received :" + new_key);
             }
             if (split_data[0].equals("6")) {
+                int leaving_node_id = Node.memcached.getPredecessorID();
                 String leaving_node_ip = Node.memcached.getPredecessorIP();
-                String leaving_node_id = Node.memcached.getPredecessorID();
-                Node.memcached.updateNode(Integer.parseInt(leaving_node_id), "0.0.0.0");
+                Node.memcached.updateNode(leaving_node_id, "0.0.0.0");
 
                 updatePredecessor(split_data);
                 updateFingerTable();
@@ -172,8 +172,8 @@ public class OfferServiceToConnectedUser extends Thread {
             }
             if (split_data[0].equals("7")) {
                 // String leaving_node_ip = Node.memcached.getSuccIP();
-                String leaving_node_id = Node.memcached.getSuccessorID();
-                Node.memcached.updateNode(Integer.parseInt(leaving_node_id), "0.0.0.0");
+                int leaving_node_id = Node.memcached.getSuccessorID();
+                Node.memcached.updateNode(leaving_node_id, "0.0.0.0");
 
                 updateSuccessor(split_data);
                 updateFingerTable();
@@ -276,7 +276,7 @@ public class OfferServiceToConnectedUser extends Thread {
         Log.d("OfferServiceToUser", "Informing successor " + this.successorIP + "For new Node " + data[2]);
 
         //Do not inform the new Node for his self obviously!!!
-        if (!(this.successorID.equals(data[1]) && this.successorIP.equals(data[2]))) {
+        if (!(this.successorID == Integer.parseInt(data[1]) && this.successorIP.equals(data[2]))) {
             Socket requestSocket = null;
             ObjectOutputStream out;
 
@@ -306,12 +306,12 @@ public class OfferServiceToConnectedUser extends Thread {
         }
     }
 
-    private void informSuccessorForLeavingNode(String leaving_node_id, String leaving_node_ip) {
+    private void informSuccessorForLeavingNode(int leaving_node_id, String leaving_node_ip) {
         Log.d("OfferServiceToUser", "Informing successor " + this.successorIP
                 + "For leaving Node " + leaving_node_id);
 
         //Do not inform the new Node for his self obviously!!!
-        if (!(this.successorID.equals(Node.memcached.getNodeID())
+        if (!(this.successorID == Node.memcached.getNodeID()
                 && this.successorIP.equals(Node.memcached.getNodeIP()))) {
             Socket requestSocket = null;
             ObjectOutputStream out;
@@ -360,7 +360,7 @@ public class OfferServiceToConnectedUser extends Thread {
 
             // Update memcached
             Node.memcached.updateNode(Integer.parseInt(data[1]), data[2]);
-            Node.memcached.setPredecessorID(data[1]);
+            Node.memcached.setPredecessorID(Integer.parseInt(data[1]));
             Node.memcached.setPredecessorIP(data[2]);
 
         } catch (IOException ex) {
@@ -379,7 +379,7 @@ public class OfferServiceToConnectedUser extends Thread {
 
             // Update memcached
             Node.memcached.updateNode(Integer.parseInt(data[1]), data[2]);
-            Node.memcached.setSuccessorID(data[1]);
+            Node.memcached.setSuccessorID(Integer.parseInt(data[1]));
             Node.memcached.setSuccessorIP(data[2]);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -391,7 +391,7 @@ public class OfferServiceToConnectedUser extends Thread {
         Log.d("OfferServiceToUser", "New Predecessor " + data[1] + " with ip " + data[2]);
 
         // If predecessors is the same, I do nothing (meaning it has already been updated by my predecessor's request)
-        if (!(predecessorID.equals(data[1]) && predecessorIP.equals(data[2]))) {
+        if (!(predecessorID == Integer.parseInt(data[1]) && predecessorIP.equals(data[2]))) {
             //Update local storage file which is referred to Node's predecessor!!!
             DataOutputStream fos;
             try {
@@ -404,7 +404,7 @@ public class OfferServiceToConnectedUser extends Thread {
 
                 //Update memcached
                 Node.memcached.updateNode(Integer.parseInt(data[1]), data[2]);
-                Node.memcached.setPredecessorID(data[1]);
+                Node.memcached.setPredecessorID(Integer.parseInt(data[1]));
                 Node.memcached.setPredecessorIP(data[2]);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -417,7 +417,7 @@ public class OfferServiceToConnectedUser extends Thread {
         Log.d("OfferServiceToUser", "New successor " + data[1] + " with ip " + data[2]);
 
         // If successor is the same, I do nothing (meaning it has already been updated by my successor's request)
-        if (!(successorID.equals(data[1]) && successorIP.equals(data[2]))) {
+        if (!(successorID == Integer.parseInt(data[1]) && successorIP.equals(data[2]))) {
             // Update local storage file which is referred to Node's successor!!!
             DataOutputStream fos;
             try {
@@ -430,7 +430,7 @@ public class OfferServiceToConnectedUser extends Thread {
 
                 // Update memcached
                 Node.memcached.updateNode(Integer.parseInt(data[1]), data[2]);
-                Node.memcached.setSuccessorID(data[1]);
+                Node.memcached.setSuccessorID(Integer.parseInt(data[1]));
                 Node.memcached.setSuccessorIP(data[2]);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -440,7 +440,7 @@ public class OfferServiceToConnectedUser extends Thread {
 
     private void updateDB(String[] data) {
         // Update the database Chord
-        db_helper.updateNode(data[1], data[2]);
+        db_helper.updateNode(Integer.parseInt(data[1]), data[2]);
         // Toast.makeText(this.context, "Node " + data[1] + " connected to ring!!!", Toast.LENGTH_SHORT).show();
     }
 
@@ -480,9 +480,9 @@ public class OfferServiceToConnectedUser extends Thread {
 
         Vector<String> filenames = readKeyFilenamesIntoVector();
 
-        int pred_node_id = Integer.parseInt(Node.memcached.getPredecessorID());
+        int pred_node_id = Node.memcached.getPredecessorID();
         String pred_node_ip = Node.memcached.getPredecessorIP();
-        int this_node_id = Integer.parseInt(Node.memcached.getNodeID());
+        int this_node_id = Node.memcached.getNodeID();
         String retrieved_key;
 
         for (int i = 0; i < Node.keys.size(); i++) {

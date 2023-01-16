@@ -27,11 +27,11 @@ public class Memcached {
     private final Vector<String> cachedInfo = new Vector<>();
     public Map<String, Integer> fileFrequencies = new HashMap<>();
     //**********Chord Ring variables**********
-    private String nodeID;
+    private int nodeID;
     private String nodeIP;
-    private String predecessorID;
+    private int predecessorID;
     private String predecessorIP;
-    private String successorID;
+    private int successorID;
     private String successorIP;
 
     //**********Constructors**********
@@ -111,7 +111,7 @@ public class Memcached {
     public void computeFingerTable() {
         for (int i = 0; i < M; i++) {
             Log.d("Memcached ", " " + i);
-            fingerTable[i][0] = (int) (Integer.parseInt(this.getNodeID()) + (Math.pow(2, i))) % (int) Math.pow(2, M);
+            fingerTable[i][0] = (int) (this.getNodeID() + (Math.pow(2, i))) % (int) Math.pow(2, M);
             double x = Math.pow(2, i);
             Log.d("Memcached ", Integer.valueOf(this.getNodeID()) + " " + x + "  :  " + fingerTable[i][0]);
         }
@@ -121,7 +121,7 @@ public class Memcached {
         boolean found = false;
 
         // We set the node variable to be the ID of current Device as a node in Chord Ring...
-        int node = Integer.parseInt(this.nodeID);
+        int node = this.nodeID;
 
         // The 3 iterations for the initial column.
         // For i = {1, 2, 3} in paper or in our case i = {0, 1, 2}.
@@ -172,12 +172,12 @@ public class Memcached {
         }
     }
 
-    public String getNodeID() {
+    public int getNodeID() {
         return this.nodeID;
     }
 
     //**********Set & Get functions**********
-    public void setNodeID(String id) {
+    public void setNodeID(int id) {
         this.nodeID = id;
     }
 
@@ -189,11 +189,11 @@ public class Memcached {
         this.nodeIP = ip;
     }
 
-    public String getPredecessorID() {
+    public int getPredecessorID() {
         return this.predecessorID;
     }
 
-    public void setPredecessorID(String id) {
+    public void setPredecessorID(int id) {
         this.predecessorID = id;
     }
 
@@ -205,11 +205,11 @@ public class Memcached {
         this.predecessorIP = ip;
     }
 
-    public String getSuccessorID() {
+    public int getSuccessorID() {
         return this.successorID;
     }
 
-    public void setSuccessorID(String id) {
+    public void setSuccessorID(int id) {
         this.successorID = id;
     }
 

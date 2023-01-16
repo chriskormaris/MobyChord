@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.widget.Button;
 
 import java.io.File;
@@ -42,6 +43,7 @@ public class ChooseMode extends Activity {
 
     private void newChordNodeRequest() {
         Intent intent = new Intent(this, NewNodeInfoActivity.class);
+        intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
         startActivity(intent);
     }
 

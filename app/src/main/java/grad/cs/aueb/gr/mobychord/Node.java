@@ -52,11 +52,11 @@ public class Node extends AppCompatActivity {
     private TextView myIpTV;
     private EditText logArea;
     //**********Networking Variables**********
-    private String myID = "0";
+    private int myID = 0;
     private String myIP = "0.0.0.0";
-    private String successorID = "0";
+    private int successorID = 0;
     private String successorIP = "0.0.0.0";
-    private String predecessorID = "0";
+    private int predecessorID = 0;
     // String[] chordNodes = new String[(int) Math.pow(2, M)];
     private String predecessorIP = "0.0.0.0";
     private String info;
@@ -177,9 +177,9 @@ public class Node extends AppCompatActivity {
         memcached.setSuccessorIP(this.successorIP);
 
         // Update crucial info in device memory of predecessor & successor nodes.
-        memcached.updateNode(Integer.parseInt(myID), myIP);
-        memcached.updateNode(Integer.parseInt(predecessorID), predecessorIP);
-        memcached.updateNode(Integer.parseInt(successorID), successorIP);
+        memcached.updateNode(myID, myIP);
+        memcached.updateNode(predecessorID, predecessorIP);
+        memcached.updateNode(successorID, successorIP);
 
         // Compute required node for fingerTable
         memcached.computeFingerTable();
@@ -208,7 +208,7 @@ public class Node extends AppCompatActivity {
         }
 
         if (memcached.getPredecessorIP().equals(memcached.getSuccessorIP())
-                && memcached.getPredecessorID().equals(memcached.getSuccessorID())) {
+                && memcached.getPredecessorID() == memcached.getSuccessorID()) {
             informFirstNode();
         } else {
             informPredecessor();
@@ -252,7 +252,7 @@ public class Node extends AppCompatActivity {
 
             String[] splitted = retrievedText.split(":");
 
-            setMyID(splitted[0]);
+            setMyID(Integer.parseInt(splitted[0]));
             setMyIP(splitted[1]);
 
         } catch (IOException e) {
@@ -274,7 +274,7 @@ public class Node extends AppCompatActivity {
 
             String[] splitted = retrievedText.split(":");
 
-            setPredecessorID(splitted[0]);
+            setPredecessorID(Integer.parseInt(splitted[0]));
             setPredecessorIP(splitted[1]);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -292,7 +292,7 @@ public class Node extends AppCompatActivity {
 
             String[] splitted = retrievedText.split(":");
 
-            setSuccessorID(splitted[0]);
+            setSuccessorID(Integer.parseInt(splitted[0]));
             setSuccessorIP(splitted[1]);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -308,7 +308,7 @@ public class Node extends AppCompatActivity {
             Socket requestSocket = null;
             ObjectOutputStream out;
 
-            this.info = "0" + "#" + this.myID + "#" + this.myIP;
+            this.info = 0 + "#" + this.myID + "#" + this.myIP;
 
             try {
                 requestSocket = new Socket(this.predecessorIP, 3300);
@@ -345,7 +345,7 @@ public class Node extends AppCompatActivity {
             Socket requestSocket = null;
             ObjectOutputStream out;
 
-            this.info = "2" + "#" + this.myID + "#" + this.myIP;
+            this.info = 2 + "#" + this.myID + "#" + this.myIP;
 
             try {
                 Log.d("Node", this.successorIP + " #### " + Integer.valueOf(this.successorID));
@@ -383,7 +383,7 @@ public class Node extends AppCompatActivity {
             Socket requestSocket = null;
             ObjectOutputStream out;
 
-            this.info = "1" + "#" + this.myID + "#" + this.myIP;
+            this.info = 1 + "#" + this.myID + "#" + this.myIP;
 
             try {
                 requestSocket = new Socket(this.successorIP, 3300);
@@ -507,17 +507,17 @@ public class Node extends AppCompatActivity {
 
         Vector<String> filenames = readKeyFilenamesIntoVector();
 
-        String successor_node_id = memcached.getSuccessorID();
+        int successor_node_id = memcached.getSuccessorID();
         String successor_node_ip = memcached.getSuccessorIP();
         String retrieved_key;
 
-        if (!(successor_node_id.equals(memcached.getNodeID()) && successor_node_ip.equals(memcached.getNodeIP()))) {
+        if (!(successor_node_id == memcached.getNodeID() && successor_node_ip.equals(memcached.getNodeIP()))) {
             for (int i = 0; i < Node.keys.size(); i++) {
 
                 int key_id = (int) Node.keys.toArray()[i];
 
                 retrieved_key = String.valueOf(keys.toArray()[i]);
-                this.info = "5" + "#" + retrieved_key;
+                this.info = 5 + "#" + retrieved_key;
 
                 Vector<String> filenames_to_send = new Vector<>();
                 Vector<String> filecontent_to_send = new Vector<>();
@@ -597,7 +597,7 @@ public class Node extends AppCompatActivity {
             ObjectOutputStream out;
 
             // I pass to my successor the info of my predecessor
-            this.info = "6" + "#" + memcached.getPredecessorID() + "#" + memcached.getPredecessorIP();
+            this.info = 6 + "#" + memcached.getPredecessorID() + "#" + memcached.getPredecessorIP();
 
             try {
 
@@ -633,7 +633,7 @@ public class Node extends AppCompatActivity {
             ObjectOutputStream out;
 
             //I pass to my predecessor the info of my successor
-            this.info = "7" + "#" + memcached.getSuccessorID() + "#" + memcached.getSuccessorIP();
+            this.info = 7 + "#" + memcached.getSuccessorID() + "#" + memcached.getSuccessorIP();
 
             try {
 
@@ -673,11 +673,11 @@ public class Node extends AppCompatActivity {
         this.myIP = ip;
     }
 
-    public String getMyID() {
+    public int getMyID() {
         return this.myID;
     }
 
-    public void setMyID(String id) {
+    public void setMyID(int id) {
         this.myID = id;
     }
 
@@ -685,7 +685,7 @@ public class Node extends AppCompatActivity {
         return this;
     }
 
-    public void setSuccessorID(String id) {
+    public void setSuccessorID(int id) {
         this.successorID = id;
     }
 
@@ -693,7 +693,7 @@ public class Node extends AppCompatActivity {
         this.successorIP = ip;
     }
 
-    public void setPredecessorID(String id) {
+    public void setPredecessorID(int id) {
         this.predecessorID = id;
     }
 

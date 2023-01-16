@@ -44,7 +44,7 @@ public class LookUp extends Thread {
         this.keys = keys;
 
         this.fingerTable = memcached.getFingerTable();
-        this.currentNodeID = Integer.parseInt(memcached.getNodeID());
+        this.currentNodeID = memcached.getNodeID();
         Log.d("current_node_ID", currentNodeID + "");
         this.currentNodeIP = memcached.getNodeIP();
         Log.d("current_node_IP", currentNodeIP);

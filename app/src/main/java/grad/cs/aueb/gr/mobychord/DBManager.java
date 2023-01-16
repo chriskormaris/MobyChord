@@ -81,7 +81,7 @@ public class DBManager extends SQLiteOpenHelper {
     */
 
     // Update the IP of a specific Node
-    public void updateNode(String node_id, String node_ip) {
+    public void updateNode(int node_id, String node_ip) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "UPDATE " + TABLE_NAME_NODE + " SET " + COLUMN_NAME_NODE_IP + " = '" + node_ip
                 + "' WHERE " + COLUMN_NAME_NODE_ID + " = '" + node_id + "' ;";

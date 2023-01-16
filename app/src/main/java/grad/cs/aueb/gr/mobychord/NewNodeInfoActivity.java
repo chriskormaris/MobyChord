@@ -6,13 +6,13 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.Formatter;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ public class NewNodeInfoActivity extends AppCompatActivity {
     private EditText successorIP;
     private Button startButton;
 
-    private String myID;
+    private int myID;
     private String ipAddress = null;
 
     private DBManager dbHelper;
@@ -44,11 +44,7 @@ public class NewNodeInfoActivity extends AppCompatActivity {
 
         startButton = this.findViewById(R.id.startButton);
 
-        startButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                InsertNewChordNode();
-            }
-        });
+        startButton.setOnClickListener(v -> InsertNewChordNode());
 
         dbHelper = new DBManager(this);
 
@@ -80,8 +76,48 @@ public class NewNodeInfoActivity extends AppCompatActivity {
         return Formatter.formatIpAddress(ip);
     }
 
-    //Create text file in local storage of the device and update the DB
+    // Create text files in local storage of the device and update the DB
     private void createNetworkingFiles() {
+        // Create file with the new Node's Info.
+
+        File dir = new File(Environment.getExternalStorageDirectory() + "/mobyChord/Node/Net Architecture");
+        dir.mkdirs();
+
+        try {
+            File file = new File(Environment.getExternalStorageDirectory()
+                    + "/mobyChord/Node/Net Architecture/myInfo.txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        // Create file with predecessor's info.
+        try {
+            File file = new File(Environment.getExternalStorageDirectory()
+                    + "/mobyChord/Node/Net Architecture/predecessorInfo.txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        // Create file with successor's info.
+        try {
+            File file = new File(Environment.getExternalStorageDirectory()
+                    + "/mobyChord/Node/Net Architecture/successorInfo.txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    //Populate text files in local storage of the device and update the DB
+    private void populateNetworkingFiles() {
         // Insert in database all nodes from 0 to 7 with their ips......by default id=0 and ip = 0.0.0.0
         dbHelper.addNodes();
 
@@ -92,8 +128,8 @@ public class NewNodeInfoActivity extends AppCompatActivity {
             fos = new DataOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory()
                     + "/mobyChord/Node/Net Architecture/myInfo.txt"));
             fos.writeBytes(myID + ":" + ipAddress);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
         // Create file with predecessor's info.
@@ -107,8 +143,8 @@ public class NewNodeInfoActivity extends AppCompatActivity {
             } else {
                 fos.writeBytes(predecessorID.getText().toString() + ":" + predecessorIP.getText().toString());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
         // Create file with successor's info.
@@ -122,19 +158,28 @@ public class NewNodeInfoActivity extends AppCompatActivity {
             } else {
                 fos.writeBytes(successorID.getText().toString() + ":" + successorIP.getText().toString());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
-        //Update the three Nodes . A node can actually see only his successor and his predecessor
+        // Update the three Nodes . A node can actually see only his successor and his predecessor
         if (firstConnectedNode) {
             dbHelper.updateNode(myID, ipAddress);
         } else {
             dbHelper.updateNode(myID, ipAddress);
-            dbHelper.updateNode(this.predecessorID.getText().toString(), this.predecessorIP.getText().toString());
-            dbHelper.updateNode(this.successorID.getText().toString(), this.successorIP.getText().toString());
+            if (!this.predecessorID.getText().toString().equals("")) {
+                dbHelper.updateNode(
+                        Integer.parseInt(this.predecessorID.getText().toString()),
+                        this.predecessorIP.getText().toString()
+                );
+            }
+            if (!this.successorID.getText().toString().equals("")) {
+                dbHelper.updateNode(
+                        Integer.parseInt(this.successorID.getText().toString()),
+                        this.successorIP.getText().toString()
+                );
+            }
         }
-
     }
 
     private void readInput() {
@@ -145,23 +190,24 @@ public class NewNodeInfoActivity extends AppCompatActivity {
         successorID = this.findViewById(R.id.successorID);
         successorIP = this.findViewById(R.id.successorIP);
 
-        myID = nodeID.getText().toString();
+        try {
+            myID = Integer.parseInt(nodeID.getText().toString());
+        } catch (NumberFormatException ex) {
+            myID = 0;
+        }
+
         ipAddress = nodeIP.getText().toString();
 
         if (ipAddress.equals("")) {
             ipAddress = getLocalIP();
         }
-
-        if (myID.equals("")) {
-            myID = "0";
-        }
     }
 
     //After creating the basic files will be trasferred in a new Activity in order to get to miniServer mode!!!
     private void InsertNewChordNode() {
-        readInput();
-
         createNetworkingFiles();
+        readInput();
+        populateNetworkingFiles();
 
         Intent intent = new Intent(this, Node.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
