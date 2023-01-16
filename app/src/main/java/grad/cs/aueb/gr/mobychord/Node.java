@@ -746,8 +746,8 @@ public class Node extends AppCompatActivity {
                     );
                     */
 
-                    Thread t = new OfferServiceToConnectedUser(getContext(), connection);
-                    t.start();
+                    Thread thread = new OfferServiceToConnectedUser(getContext(), connection);
+                    thread.start();
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
