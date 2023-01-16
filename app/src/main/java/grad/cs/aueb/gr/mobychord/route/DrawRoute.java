@@ -44,8 +44,8 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback {
     private final List<LatLng> latlngs = new ArrayList<>();
     private final List<Marker> markers = new ArrayList<>();
     private GoogleMap mMap;
-    private String srcPostalCode;
-    private String dstPostalCode;
+    private String srcPostalCode = "";
+    private String dstPostalCode = "";
     private LatLng srcLocation;
     private LatLng dstLocation;
 

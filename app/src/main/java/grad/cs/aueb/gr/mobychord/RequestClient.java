@@ -44,10 +44,10 @@ public class RequestClient extends AppCompatActivity {
 
     private ServerSocket miniServerSocket;
 
-    private String srcLocationName;
-    private String dstLocationName;
-    private String srcPostalCode;
-    private String dstPostalCode;
+    private String srcLocationName = "";
+    private String dstLocationName = "";
+    private String srcPostalCode = "";
+    private String dstPostalCode = "";
     private LatLng srcLatLng;
     private LatLng dstLatLng;
 

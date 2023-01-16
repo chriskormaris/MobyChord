@@ -37,7 +37,7 @@ public class LookUp extends Thread {
     private String forwardNodeIP;
     private String contentToBeHashed;
     private String routeFilename;
-    private String routeInfo;
+    private String routeInfo = "";
     private final String googleMapsKey;
 
     public LookUp(Memcached memcached, Set<Integer> keys, String passInfo, String googleMapsKey) {

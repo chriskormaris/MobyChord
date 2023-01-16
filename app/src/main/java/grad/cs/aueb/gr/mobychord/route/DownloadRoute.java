@@ -25,7 +25,7 @@ public class DownloadRoute extends Thread {
     private final LatLng sourceLocation;
     private final LatLng destinationLocation;
 
-    private String jsonRoute;
+    private String jsonRoute = "";
     private final String googleMapsKey;
 
     public DownloadRoute(
