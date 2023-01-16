@@ -25,17 +25,24 @@ public class DownloadRoute extends Thread {
     private final LatLng sourceLocation;
     private final LatLng destinationLocation;
 
-    private String jsonRoute = "";
+    private String jsonRoute;
+    private final String googleMapsKey;
 
-    public DownloadRoute(String routeFilename, LatLng sourceLocation, LatLng destinationLocation) {
+    public DownloadRoute(
+            String routeFilename,
+            LatLng sourceLocation,
+            LatLng destinationLocation,
+            String googleMapsKey
+    ) {
         this.routeFilename = routeFilename;
         this.sourceLocation = sourceLocation;
         this.destinationLocation = destinationLocation;
+        this.googleMapsKey = googleMapsKey;
 
-        Log.d("srcLocation latitude", sourceLocation.latitude + "");
-        Log.d("srcLocation longitude", sourceLocation.longitude + "");
-        Log.d("dstLocation latitude", destinationLocation.latitude + "");
-        Log.d("dstLocation longitude", destinationLocation.longitude + "");
+        Log.d("SRC_LAT", String.valueOf(sourceLocation.latitude));
+        Log.d("SRC_LONG", String.valueOf(sourceLocation.longitude));
+        Log.d("DST_LAT", String.valueOf(destinationLocation.latitude));
+        Log.d("DST_LONG", String.valueOf(destinationLocation.longitude));
     }
 
     @Override
@@ -47,7 +54,7 @@ public class DownloadRoute extends Thread {
 
         // Getting URL to the Google Directions API
         // This url should be obtained from one of the nodes.
-        String url = getDirectionsUrl(sourceLocation, destinationLocation);
+        String url = getDirectionsUrl();
         Log.d("URL", url);
 
         // Get the route in JSON format and
@@ -75,18 +82,19 @@ public class DownloadRoute extends Thread {
         }
     }
 
-    private String getDirectionsUrl(LatLng origin, LatLng dest) {
+    private String getDirectionsUrl() {
         // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        String str_origin = "origin=" + sourceLocation.latitude + "," + sourceLocation.longitude;
 
         // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        String str_dest = "destination=" + destinationLocation.latitude + "," + destinationLocation.longitude;
 
         // Sensor enabled
         String sensor = "sensor=false";
 
         // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + "&" + sensor;
+        parameters += "&key=" + googleMapsKey;
 
         // Output format
         String output = "json";

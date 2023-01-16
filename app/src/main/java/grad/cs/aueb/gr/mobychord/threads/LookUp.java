@@ -37,18 +37,22 @@ public class LookUp extends Thread {
     private String forwardNodeIP;
     private String contentToBeHashed;
     private String routeFilename;
-    private String routeInfo = "";
+    private String routeInfo;
+    private final String googleMapsKey;
 
-    public LookUp(Memcached memcached, Set<Integer> keys, String passInfo) {
+    public LookUp(Memcached memcached, Set<Integer> keys, String passInfo, String googleMapsKey) {
         this.memcached = memcached;
         this.keys = keys;
 
         this.fingerTable = memcached.getFingerTable();
+
         this.currentNodeID = memcached.getNodeID();
         Log.d("current_node_ID", currentNodeID + "");
         this.currentNodeIP = memcached.getNodeIP();
         Log.d("current_node_IP", currentNodeIP);
+
         this.passInfo = passInfo;
+        this.googleMapsKey = googleMapsKey;
     }
 
     @Override
@@ -90,12 +94,12 @@ public class LookUp extends Thread {
             Log.d("KEY_FOUND", "Node: " + currentNodeID + " contains the key that was asked.");
 
             // search for routeFilename in Memcached and then in the hard disk
-            routeInfo = searchRouteFile(routeFilename);
+            routeInfo = searchRouteFile();
 
             // If routeFilename does not reside in Memcached nor the hard disk
             // download it from Google.
             if (routeInfo.equals("")) {
-                downloadRouteFile(routeFilename);
+                downloadRouteFile();
             }
 
             // Thread finished here. The job is done.
@@ -141,7 +145,7 @@ public class LookUp extends Thread {
         }
     }
 
-    private String searchRouteFile(String routeFilename) {
+    private String searchRouteFile() {
         // get file from Memcached if exists
         Log.d("searchRoute", "checking if file exists in memcached...");
         routeInfo = memcached.requestFile(routeFilename + ".json");
@@ -161,21 +165,25 @@ public class LookUp extends Thread {
         return routeInfo;
     }
 
-    private void downloadRouteFile(String routeFilename) {
+    private void downloadRouteFile() {
         // if file not in disk
         if (routeInfo.equals("")) {
             // download route file from Google
-            double srcLatitude = Double.parseDouble(passInfo.split("#")[3]);
-            double srcLongitude = Double.parseDouble(passInfo.split("#")[4]);
-            LatLng srcLocation = new LatLng(srcLatitude, srcLongitude);
+            double srcLat = Double.parseDouble(passInfo.split("#")[3]);
+            double srcLong = Double.parseDouble(passInfo.split("#")[4]);
+            LatLng sourceLocation = new LatLng(srcLat, srcLong);
 
-            double dstLatitude = Double.parseDouble(passInfo.split("#")[5]);
-            double dstLongitude = Double.parseDouble(passInfo.split("#")[6]);
-            LatLng dstLocation = new LatLng(dstLatitude, dstLongitude);
+            double dstLat = Double.parseDouble(passInfo.split("#")[5]);
+            double dstLong = Double.parseDouble(passInfo.split("#")[6]);
+            LatLng destinationLocation = new LatLng(dstLat, dstLong);
 
             // the new route is downloaded saved to file.
-            DownloadRoute downloadNewRouteThread
-                    = new DownloadRoute(routeFilename, srcLocation, dstLocation);
+            DownloadRoute downloadNewRouteThread = new DownloadRoute(
+                    routeFilename,
+                    sourceLocation,
+                    destinationLocation,
+                    googleMapsKey
+            );
             downloadNewRouteThread.start();
             try {
                 downloadNewRouteThread.join();

@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import grad.cs.aueb.gr.mobychord.DBManager;
 import grad.cs.aueb.gr.mobychord.Node;
+import grad.cs.aueb.gr.mobychord.R;
 
 // import android.widget.Toast;
 
@@ -203,7 +204,12 @@ public class OfferServiceToConnectedUser extends Thread {
                 String passInfo = received_data;
                 Log.d("passInfo", passInfo);
 
-                LookUp lookUpThread = new LookUp(Node.memcached, Node.keys, passInfo);
+                LookUp lookUpThread = new LookUp(
+                        Node.memcached,
+                        Node.keys,
+                        passInfo,
+                        context.getApplicationContext().getString(R.string.google_maps_key)
+                );
                 lookUpThread.start();
 
                 try {
