@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="msc_aueb_gr_pol_liosis.mobychord.NewNodeInfoActivity">
+    tools:context="grad.cs.aueb.gr.mobychord.grad.cs.aueb.gr.mobychord.NewNodeInfoActivity">
 
     <TextView
         android:text="Node ID: "
@@ -85,17 +85,20 @@
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:text="Successor ID:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/textView5"
-        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:layout_width="99dp"
+        android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/successorID"
-        android:layout_alignBottom="@+id/successorID"
+        android:layout_alignEnd="@+id/textView4"
         android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView"
+        android:layout_alignBottom="@+id/successorID"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="-42dp"
+        android:layout_marginBottom="12dp"
+        android:text="Successor ID:"
+        android:textAppearance="@style/TextAppearance.AppCompat" />
 
     <EditText
         android:id="@+id/successorID"

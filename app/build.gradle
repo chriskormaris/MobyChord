@@ -4,12 +4,12 @@ android {
     compileSdkVersion 33
 
     defaultConfig {
-        applicationId "msc_aueb_gr_pol_liosis.mobychord"
+        applicationId 'grad.cs.aueb.gr.mobychord'
         minSdkVersion 19
         targetSdkVersion 33
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName '1.0'
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
 
     buildTypes {
@@ -18,7 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'msc_aueb_gr_pol_liosis.mobychord'
+    namespace 'grad.cs.aueb.gr.mobychord'
 }
 
 dependencies {

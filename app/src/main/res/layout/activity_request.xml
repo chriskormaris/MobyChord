@@ -91,13 +91,13 @@
             android:ems="10"
             android:layout_marginTop="10dp"
             android:id="@+id/srcLocation"
-            android:hint="Zografos"
+            android:hint="Zografou"
             android:textColorHint="@color/gray"
             android:layout_below="@+id/askNodeIP"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:inputType="text"
-            android:text="Papagou 10, Zografos"
+            android:text="Papagou 10, Zografou"
             android:textColor="@android:color/white" />
 
         <RadioGroup
