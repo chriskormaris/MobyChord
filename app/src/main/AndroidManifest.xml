@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="gr.aueb.cs.grad.mobychord">
 
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
@@ -43,12 +44,12 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name="gr.aueb.cs.grad.mobychord.ChooseMode" />
-        <activity android:name="gr.aueb.cs.grad.mobychord.RequestClient" />
-        <activity android:name="gr.aueb.cs.grad.mobychord.Node" />
-        <activity android:name="gr.aueb.cs.grad.mobychord.NewNodeInfoActivity" />
+        <activity android:name=".ChooseMode" />
+        <activity android:name=".RequestClient" />
+        <activity android:name=".Node" />
+        <activity android:name=".NewNodeInfoActivity" />
         <activity
-            android:name="gr.aueb.cs.grad.mobychord.SplashScreen"
+            android:name=".SplashScreen"
             android:exported="true"
             android:label="@string/title_activity_splash_screen"
             android:theme="@style/AppTheme.NoActionBar">
@@ -61,10 +62,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="gr.aueb.cs.grad.mobychord.route.DrawRoute" />
+        <activity android:name=".route.DrawRoute" />
 
         <service
-            android:name="gr.aueb.cs.grad.mobychord.route.GPSTracker"
+            android:name=".route.GPSTracker"
             android:exported="false" />
 
     </application>
