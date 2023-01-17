@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord;
+package gr.aueb.cs.grad.mobychord;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -32,9 +32,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Locale;
 
-import grad.cs.aueb.gr.mobychord.route.DrawRoute;
-import grad.cs.aueb.gr.mobychord.route.GPSTracker;
-import grad.cs.aueb.gr.mobychord.threads.RequestRouteFromNode;
+import gr.aueb.cs.grad.mobychord.route.DrawRoute;
+import gr.aueb.cs.grad.mobychord.route.GPSTracker;
+import gr.aueb.cs.grad.mobychord.threads.RequestRouteFromNode;
 
 //********************************* Polyvios Liosis ************************************//
 //********************************* Christos Kormaris **********************************//

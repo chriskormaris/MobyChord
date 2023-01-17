@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord.threads;
+package gr.aueb.cs.grad.mobychord.threads;
 
 import android.util.Log;
 

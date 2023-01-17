@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord;
+package gr.aueb.cs.grad.mobychord;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,7 +23,7 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("grad.cs.aueb.gr.mobychord", appContext.getPackageName());
+        assertEquals("gr.aueb.cs.grad.mobychord", appContext.getPackageName());
     }
 
 }

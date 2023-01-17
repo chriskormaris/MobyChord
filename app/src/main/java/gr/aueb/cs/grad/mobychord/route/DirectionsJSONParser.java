@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord.route;
+package gr.aueb.cs.grad.mobychord.route;
 
 import android.util.Log;
 

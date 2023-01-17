@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord;
+package gr.aueb.cs.grad.mobychord;
 
 import static org.junit.Assert.assertEquals;
 

@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord.route;
+package gr.aueb.cs.grad.mobychord.route;
 
 import android.os.Environment;
 import android.util.Log;
@@ -24,9 +24,8 @@ public class DownloadRoute extends Thread {
     private final String routeFilename;
     private final LatLng sourceLocation;
     private final LatLng destinationLocation;
-
-    private String jsonRoute = "";
     private final String googleMapsKey;
+    private String jsonRoute = "";
 
     public DownloadRoute(
             String routeFilename,

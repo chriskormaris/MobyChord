@@ -1,6 +1,6 @@
-package grad.cs.aueb.gr.mobychord;
+package gr.aueb.cs.grad.mobychord;
 
-import static grad.cs.aueb.gr.mobychord.ChordSize.M;
+import static gr.aueb.cs.grad.mobychord.ChordSize.M;
 
 import android.util.Log;
 

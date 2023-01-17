@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord.threads;
+package gr.aueb.cs.grad.mobychord.threads;
 
 import android.content.Context;
 import android.os.Environment;
@@ -16,9 +16,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Vector;
 
-import grad.cs.aueb.gr.mobychord.DBManager;
-import grad.cs.aueb.gr.mobychord.Node;
-import grad.cs.aueb.gr.mobychord.R;
+import gr.aueb.cs.grad.mobychord.DBManager;
+import gr.aueb.cs.grad.mobychord.Node;
+import gr.aueb.cs.grad.mobychord.R;
 
 // import android.widget.Toast;
 

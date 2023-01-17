@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord.route;
+package gr.aueb.cs.grad.mobychord.route;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import grad.cs.aueb.gr.mobychord.R;
+import gr.aueb.cs.grad.mobychord.R;
 
 
 //********************************* Polyvios Liosis ************************************//

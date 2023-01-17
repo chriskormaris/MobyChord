@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord;
+package gr.aueb.cs.grad.mobychord;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import grad.cs.aueb.gr.mobychord.threads.OfferServiceToConnectedUser;
+import gr.aueb.cs.grad.mobychord.threads.OfferServiceToConnectedUser;
 
 //********************************* Polyvios Liosis ************************************//
 //********************************* Christos Kormaris **********************************//

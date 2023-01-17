@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord;
+package gr.aueb.cs.grad.mobychord;
 
 /**
  * Created by Chris on 2/16/2017.

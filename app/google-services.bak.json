@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:397012046313:android:9300cbe9cdf2f508213b78",
+        "mobilesdk_app_id": "1:397012046313:android:3676a9e4535aed3f213b78",
         "android_client_info": {
-          "package_name": "grad.cs.aueb.gr.mobychord"
+          "package_name": "gr.aueb.cs.grad.mobychord"
         }
       },
       "oauth_client": [
         {
-          "client_id": "397012046313-d0pqn1btqgqj4q160h3rduv3tft4pea3.apps.googleusercontent.com",
+          "client_id": "397012046313-vcs16rive6530d4g90bl45i3usujff66.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "grad.cs.aueb.gr.mobychord",
+            "package_name": "gr.aueb.cs.grad.mobychord",
             "certificate_hash": "d0ce3013c2139615802923eacdca8991bf3f0a6f"
           }
         },

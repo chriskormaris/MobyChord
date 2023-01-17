@@ -10,8 +10,8 @@ android {
     compileSdkVersion 33
 
     defaultConfig {
-        applicationId 'grad.cs.aueb.gr.mobychord'
-        minSdkVersion 19
+        applicationId 'gr.aueb.cs.grad.mobychord'
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
         versionName '1.0'
@@ -24,7 +24,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'grad.cs.aueb.gr.mobychord'
+    namespace 'gr.aueb.cs.grad.mobychord'
 }
 
 dependencies {

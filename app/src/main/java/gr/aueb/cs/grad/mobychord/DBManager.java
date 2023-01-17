@@ -1,6 +1,4 @@
-package grad.cs.aueb.gr.mobychord;
-
-import static grad.cs.aueb.gr.mobychord.ChordSize.M;
+package gr.aueb.cs.grad.mobychord;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -64,7 +62,7 @@ public class DBManager extends SQLiteOpenHelper {
         // Clean possible info from previous connection on the ring of Chord Architecture
         this.eraseTableNode();
 
-        for (int i = 0; i < (int) Math.pow(2, M); i++) {
+        for (int i = 0; i < (int) Math.pow(2, ChordSize.M); i++) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(COLUMN_NAME_NODE_ID, String.valueOf(i));

@@ -1,6 +1,4 @@
-package grad.cs.aueb.gr.mobychord.threads;
-
-import static grad.cs.aueb.gr.mobychord.ChordSize.M;
+package gr.aueb.cs.grad.mobychord.threads;
 
 import android.os.Environment;
 import android.util.Log;
@@ -14,9 +12,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Set;
 
-import grad.cs.aueb.gr.mobychord.Memcached;
-import grad.cs.aueb.gr.mobychord.hashing.Hashing;
-import grad.cs.aueb.gr.mobychord.route.DownloadRoute;
+import gr.aueb.cs.grad.mobychord.ChordSize;
+import gr.aueb.cs.grad.mobychord.Memcached;
+import gr.aueb.cs.grad.mobychord.hashing.Hashing;
+import gr.aueb.cs.grad.mobychord.route.DownloadRoute;
 
 
 /**
@@ -30,6 +29,7 @@ public class LookUp extends Thread {
     private final int currentNodeID;
     private final String currentNodeIP;
     private final Set<Integer> keys;
+    private final String googleMapsKey;
     // variables to store what passInfo contains
     private String sourcePostalCode;
     private String destinationPostalCode;
@@ -38,7 +38,6 @@ public class LookUp extends Thread {
     private String contentToBeHashed;
     private String routeFilename;
     private String routeInfo = "";
-    private final String googleMapsKey;
 
     public LookUp(Memcached memcached, Set<Integer> keys, String passInfo, String googleMapsKey) {
         this.memcached = memcached;
@@ -65,7 +64,7 @@ public class LookUp extends Thread {
         Log.d("CONTENT", contentToBeHashed);
 
         // hashId represents the node where we can find the requested route
-        int hashId = Hashing.Hash(contentToBeHashed, (int) Math.pow(2, M));
+        int hashId = Hashing.Hash(contentToBeHashed, (int) Math.pow(2, ChordSize.M));
         Log.d("HASH", hashId + "");
 
         routeFilename = hashId + "_" + contentToBeHashed;

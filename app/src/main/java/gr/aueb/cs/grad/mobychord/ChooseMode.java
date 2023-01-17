@@ -1,10 +1,9 @@
-package grad.cs.aueb.gr.mobychord;
+package gr.aueb.cs.grad.mobychord;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.widget.Button;
 
 import java.io.File;

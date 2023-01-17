@@ -43,12 +43,12 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name="grad.cs.aueb.gr.mobychord.ChooseMode" />
-        <activity android:name="grad.cs.aueb.gr.mobychord.RequestClient" />
-        <activity android:name="grad.cs.aueb.gr.mobychord.Node" />
-        <activity android:name="grad.cs.aueb.gr.mobychord.NewNodeInfoActivity" />
+        <activity android:name="gr.aueb.cs.grad.mobychord.ChooseMode" />
+        <activity android:name="gr.aueb.cs.grad.mobychord.RequestClient" />
+        <activity android:name="gr.aueb.cs.grad.mobychord.Node" />
+        <activity android:name="gr.aueb.cs.grad.mobychord.NewNodeInfoActivity" />
         <activity
-            android:name="grad.cs.aueb.gr.mobychord.SplashScreen"
+            android:name="gr.aueb.cs.grad.mobychord.SplashScreen"
             android:exported="true"
             android:label="@string/title_activity_splash_screen"
             android:theme="@style/AppTheme.NoActionBar">
@@ -61,10 +61,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="grad.cs.aueb.gr.mobychord.route.DrawRoute" />
+        <activity android:name="gr.aueb.cs.grad.mobychord.route.DrawRoute" />
 
         <service
-            android:name="grad.cs.aueb.gr.mobychord.route.GPSTracker"
+            android:name="gr.aueb.cs.grad.mobychord.route.GPSTracker"
             android:exported="false" />
 
     </application>

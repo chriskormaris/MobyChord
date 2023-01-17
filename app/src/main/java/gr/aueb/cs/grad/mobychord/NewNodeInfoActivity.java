@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord;
+package gr.aueb.cs.grad.mobychord;
 
 import android.content.Intent;
 import android.net.wifi.WifiInfo;

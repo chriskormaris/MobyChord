@@ -1,4 +1,4 @@
-package grad.cs.aueb.gr.mobychord.hashing;
+package gr.aueb.cs.grad.mobychord.hashing;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
