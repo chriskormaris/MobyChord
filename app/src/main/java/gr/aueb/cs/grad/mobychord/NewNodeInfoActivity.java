@@ -65,8 +65,8 @@ public class NewNodeInfoActivity extends AppCompatActivity {
                     }
                 }
             }
-        } catch (SocketException e) {
-            e.printStackTrace();
+        } catch (SocketException ex) {
+            ex.printStackTrace();
         }
         */
 

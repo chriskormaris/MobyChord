@@ -255,8 +255,8 @@ public class Node extends AppCompatActivity {
             setMyID(Integer.parseInt(splitted[0]));
             setMyIP(splitted[1]);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
         // retrieve info for the predecessor
@@ -489,11 +489,11 @@ public class Node extends AppCompatActivity {
             }
             br.close();
 
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ex) {
             Log.e("KEY_FILE_NOT_FOUND", "Key file with this name does not exist!");
             retrievedText = new StringBuilder();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
         return retrievedText.toString();
@@ -573,8 +573,8 @@ public class Node extends AppCompatActivity {
                 out = new ObjectOutputStream(requestSocket.getOutputStream());
                 out.writeObject("402#WRITE");
                 out.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             } finally {
                 try {
                     if (requestSocket != null) {

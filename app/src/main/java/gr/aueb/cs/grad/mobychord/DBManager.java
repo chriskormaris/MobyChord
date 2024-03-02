@@ -87,8 +87,8 @@ public class DBManager extends SQLiteOpenHelper {
         try {
             db.execSQL(query);
             Log.d("Database: ", "Node" + node_id + " updated: New ip ----> " + node_ip);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

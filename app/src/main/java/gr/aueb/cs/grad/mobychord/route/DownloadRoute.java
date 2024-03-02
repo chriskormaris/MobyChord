@@ -76,8 +76,8 @@ public class DownloadRoute extends Thread {
             writer.close();
             Log.d("FILE_CREATED", "File generated with name \"" + filename + "\"");
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -134,9 +134,9 @@ public class DownloadRoute extends Thread {
             data = stringBuffer.toString();
 
             br.close();
-        } catch (Exception e) {
+        } catch (Exception ex) {
             // Exception while downloading url
-            Log.d("Exception", e.toString());
+            Log.d("Exception", ex.toString());
         } finally {
             iStream.close();
             urlConnection.disconnect();
@@ -156,8 +156,8 @@ public class DownloadRoute extends Thread {
         try {
             // Fetching the data from web service.
             data = downloadUrl(url);
-        } catch (Exception e) {
-            Log.d("Background Task", e.toString());
+        } catch (Exception ex) {
+            Log.d("Background Task", ex.toString());
         }
 
         jsonRoute = data;

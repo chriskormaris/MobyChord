@@ -189,8 +189,8 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback {
                 // Starts parsing data
                 route = parser.parse(jObject).get(0);
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
             return route;
         }

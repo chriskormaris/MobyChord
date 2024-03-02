@@ -275,8 +275,8 @@ public class RequestClient extends AppCompatActivity {
             if (miniServerSocket != null) {
                 miniServerSocket.close();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
         // make progress bar invisible
@@ -296,8 +296,8 @@ public class RequestClient extends AppCompatActivity {
             if (miniServerSocket != null) {
                 miniServerSocket.close();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -332,8 +332,8 @@ public class RequestClient extends AppCompatActivity {
                 Log.d("retrievedRouteInfo", routeInfo);
 
                 // }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
 
             /* GET ROUTE FROM CHORD AND DRAW. */
