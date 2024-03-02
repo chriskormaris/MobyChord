@@ -41,7 +41,7 @@ import gr.aueb.cs.grad.mobychord.R;
 public class DrawRoute extends FragmentActivity implements OnMapReadyCallback {
 
     private final MarkerOptions options = new MarkerOptions();
-    private final List<LatLng> latlngs = new ArrayList<>();
+    private final List<LatLng> latLngs = new ArrayList<>();
     private final List<Marker> markers = new ArrayList<>();
     private GoogleMap mMap;
     private String srcPostalCode = "";
@@ -132,8 +132,8 @@ public class DrawRoute extends FragmentActivity implements OnMapReadyCallback {
         Log.d("DST_LOCATION", dstLocation.toString());
 
         // ADD MARKERS ON MAP
-        latlngs.add(srcLocation);
-        latlngs.add(dstLocation);
+        latLngs.add(srcLocation);
+        latLngs.add(dstLocation);
 
         options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
         options.position(srcLocation);
